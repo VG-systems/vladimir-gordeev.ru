@@ -204,8 +204,16 @@
   <!-- Единственное корректное подключение основного файла стилей -->
   <link rel="stylesheet" href="/assets/css/style.css">
 
-  <!-- Three.js Engine (Аудит версии вынесен в сопроводительную записку) -->
-  <script src="/assets/js/lib/three.min.js"></script>
+  <!-- Асинхронные неблокирующие модули WebGL (загружаются в фоне, выполняются по порядку) -->
+  <script defer src="/assets/js/lib/three.min.js"></script>
+  <script defer src="/assets/js/cosmos.js"></script>
+  <script defer src="/assets/js/dust.js"></script>
+  <script defer src="/assets/js/mist.js"></script> 
+  <script defer src="/assets/js/sun.js"></script>
+  <script defer src="/assets/js/water.js"></script>
+  <script defer src="/assets/js/planets.js"></script>
+  <script defer src="/assets/js/genesis.js"></script>
+  <script defer src="/assets/js/main.js"></script>
 </head>
 <body class="modal-open">
   <canvas id="webgl"></canvas>
@@ -303,7 +311,7 @@
     </section>
   </main>
 
-  <!-- Скрипт доступности диалога (Управление фокусом и Escape) -->
+  <!-- Скрипт доступности диалога (Работает автономно и мгновенно, без ожидания Three.js) -->
   <script>
     (function() {
       const wrap = document.getElementById('modalWrap');
@@ -325,9 +333,9 @@
         btnCloseTop.focus();
       }
 
-      btnCloseTop.addEventListener('click', minimizeCard);
-      btnMinimizeBottom.addEventListener('click', minimizeCard);
-      btnRestore.addEventListener('click', expandCard);
+      if (btnCloseTop) btnCloseTop.addEventListener('click', minimizeCard);
+      if (btnMinimizeBottom) btnMinimizeBottom.addEventListener('click', minimizeCard);
+      if (btnRestore) btnRestore.addEventListener('click', expandCard);
 
       // Закрытие по клавише Escape
       window.addEventListener('keydown', function(e) {
@@ -335,17 +343,14 @@
           minimizeCard();
         }
       });
+
+      // Изоляция взаимодействия с модалкой от камеры WebGL
+      ['mousedown', 'mousemove', 'mouseup', 'touchstart', 'touchmove', 'touchend', 'wheel', 'pointerdown'].forEach(function(evt) {
+        wrap.addEventListener(evt, function(e) {
+          e.stopPropagation();
+        });
+      });
     })();
   </script>
-
-  <!-- Модули трехмерной сцены -->
-  <script src="/assets/js/cosmos.js"></script>
-  <script src="/assets/js/dust.js"></script>
-  <script src="/assets/js/mist.js"></script> 
-  <script src="/assets/js/sun.js"></script>
-  <script src="/assets/js/water.js"></script>
-  <script src="/assets/js/planets.js"></script>
-  <script src="/assets/js/genesis.js"></script>
-  <script src="/assets/js/main.js"></script>
 </body>
 </html>
