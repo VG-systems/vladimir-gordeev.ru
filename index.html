@@ -2,16 +2,16 @@
 <html lang="ru" prefix="og: https://ogp.me/ns#">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <!-- Доступный viewport: разрешен пользовательский зум для людей со слабым зрением -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   
-  <!-- Базовые мета-теги -->
   <title>Владимир Гордеев // Web, IoT, ПЛК & Python разработка на заказ</title>
   <meta name="description" content="Инженерная мастерская Владимира Гордеева. Разработка веб-сервисов, IoT-устройств (ESP32/Arduino), программирование промышленных ПЛК, прикладной Python и ПО на заказ.">
   <meta name="author" content="Владимир Гордеев">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://vladimir-gordeev.ru/">
 
-  <!-- Open Graph / Мессенджеры -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://vladimir-gordeev.ru/">
   <meta property="og:title" content="Владимир Гордеев // Web, IoT, ПЛК & Python разработка">
@@ -25,625 +25,183 @@
   <meta name="twitter:description" content="Разработка программного обеспечения под ключ, автоматизация и embedded-решения.">
   <meta name="twitter:image" content="https://vladimir-gordeev.ru/preview.jpg">
 
-  <!-- Микроразметка Schema.org (JSON-LD) по стандартам ЭПОС 2026 -->
+  <!-- Валидная микроразметка Schema.org: ProfilePage -> Person (без плейсхолдеров и устаревших типов) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": ["Person", "ProfessionalService"],
-    "name": "Владимир Гордеев",
-    "alternateName": "Инженерная мастерская Владимира Гордеева",
-    "url": "https://vladimir-gordeev.ru/",
-    "image": "https://vladimir-gordeev.ru/preview.jpg",
-    "jobTitle": "Инженер-разработчик, Web & IoT Architect",
-    "description": "Разработка веб-систем под ключ, проектирование решений IoT на контроллерах ESP32/Arduino, программирование промышленных ПЛК, Python-автоматизация и заказное ПО.",
-    "knowsAbout": [
-      "Web Development",
-      "Python",
-      "Telegram Bots",
-      "ESP32",
-      "Arduino",
-      "ПЛК (PLC)",
-      "Промышленная автоматизация",
-      "C/C++ Embedded",
-      "IoT",
-      "Modbus",
-      "MQTT",
-      "PostgreSQL",
-      "Docker"
-    ],
-    "sameAs": [
-      "https://t.me/your_telegram",
-      "https://github.com/your_github"
-    ],
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "contactType": "customer service",
-      "email": "contact@vladimir-gordeev.ru",
-      "url": "https://t.me/your_telegram"
+    "@type": "ProfilePage",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Владимир Гордеев",
+      "alternateName": "Инженерная мастерская Владимира Гордеева",
+      "url": "https://vladimir-gordeev.ru/",
+      "image": "https://vladimir-gordeev.ru/preview.jpg",
+      "jobTitle": "Инженер-разработчик, Web & IoT Architect",
+      "description": "Разработка веб-систем под ключ, проектирование решений IoT на контроллерах ESP32/Arduino, программирование промышленных ПЛК, Python-автоматизация и заказное ПО.",
+      "knowsAbout": [
+        "Web Development",
+        "Python",
+        "Telegram Bots",
+        "ESP32",
+        "Arduino",
+        "ПЛК (PLC)",
+        "Промышленная автоматизация",
+        "C/C++ Embedded",
+        "IoT",
+        "Modbus",
+        "MQTT",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "sameAs": [
+        "https://t.me/LoftCreator"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "dev@vladimir-gordeev.ru",
+        "url": "https://t.me/LoftCreator"
+      }
     }
   }
   </script>
 
+  <!-- КРИТИЧЕСКИЙ CSS (Zero-CLS, Safe-Area Skeleton, без text-size-adjust: none) -->
   <style>
-    /* ==========================================================================
-       CSS CORE SPEC 26+ ARCHITECTURE
-       ========================================================================== */
-    @layer reset, tokens, base, hud, components, a11y;
-
-    /* --------------------------------------------------------------------------
-       1. Слой Reset: сброс специфичности через :where
-       -------------------------------------------------------------------------- */
-    @layer reset {
-      :where(*, *::before, *::after) {
-        box-sizing: border-box;
-        margin-block: 0;
-        margin-inline: 0;
-        padding-block: 0;
-        padding-inline: 0;
-      }
-      :where(html) {
-        -webkit-text-size-adjust: none;
-        text-size-adjust: none;
-        interpolate-size: allow-keywords;
-      }
-      :where(button, input, textarea) {
-        font: inherit;
-        color: inherit;
-        letter-spacing: inherit;
-        border: none;
-        background: transparent;
-      }
+    :where(*, *::before, *::after) {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    /* --------------------------------------------------------------------------
-       2. Слой Tokens: OKLCH, относительные цвета и физический стек теней
-       -------------------------------------------------------------------------- */
-    @layer tokens {
-      :root {
-        color-scheme: light dark;
-
-        --brand-hue: 255;
-        --brand-chroma: 0.22;
-        --solar-hue: 85;
-
-        /* Поверхности */
-        --surface-ground: #020307;
-        --surface-card-base: oklch(0.12 0.035 var(--brand-hue));
-        --surface-card-glass: oklch(from var(--surface-card-base) l c h / 0.44);
-        --surface-card-minimized: oklch(from var(--surface-card-base) l c h / 0.55);
-        --surface-field: oklch(from var(--surface-card-base) calc(l + 0.04) c h / 0.3);
-
-        /* Текстовые токены */
-        --text-primary: oklch(0.96 0.005 var(--brand-hue));
-        --text-secondary: oklch(0.86 0.02 var(--brand-hue));
-        --text-muted: oklch(0.68 0.03 var(--brand-hue));
-
-        /* Акценты */
-        --color-solar: oklch(0.85 0.16 var(--solar-hue));
-        --color-solar-glow: oklch(from var(--color-solar) l c h / 0.22);
-        --color-cyan: oklch(0.74 0.12 215);
-
-        /* Границы */
-        --border-subtle: color-mix(in oklch, var(--text-primary) 12%, transparent);
-        --border-solar: color-mix(in oklch, var(--color-solar) 28%, transparent);
-        --border-solar-hover: color-mix(in oklch, var(--color-solar) 55%, transparent);
-
-        /* Многослойный стек амбиентных теней */
-        --shadow-base: oklch(0.04 0.03 var(--brand-hue));
-        --shadow-ambient:
-          0 1px 2px color-mix(in oklch, var(--shadow-base) 14%, transparent),
-          0 4px 8px color-mix(in oklch, var(--shadow-base) 12%, transparent),
-          0 12px 24px color-mix(in oklch, var(--shadow-base) 10%, transparent),
-          0 24px 50px -4px color-mix(in oklch, var(--shadow-base) 20%, transparent);
-
-        --shadow-specular-edge: inset 0 1px 0 0 oklch(1 0 0 / 0.15);
-      }
+    html, body {
+      inline-size: 100%;
+      block-size: 100%;
+      min-block-size: 100svh;
+      min-block-size: 100dvh;
+      overflow: hidden;
+      background-color: #020307;
+      font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+      color: #fafafc;
+      color-scheme: dark;
+      user-select: none;
     }
 
-    /* --------------------------------------------------------------------------
-       3. Слой Base: стабильный вьюпорт 100svh
-       -------------------------------------------------------------------------- */
-    @layer base {
-      html, body {
-        inline-size: 100%;
-        block-size: 100%;
-        min-block-size: 100svh;
-        overflow: hidden;
-        background-color: var(--surface-ground);
-        font-family: ui-monospace, "SF Mono", "Menlo", monospace;
-        color: var(--text-primary);
-        user-select: none;
-      }
-
-      #webgl {
-        position: fixed;
-        inset: 0;
-        inline-size: 100vw;
-        block-size: 100svh;
-        display: block;
-        z-index: 1;
-        touch-action: none;
-      }
+    :where(button, input, textarea) {
+      font: inherit;
+      color: inherit;
+      letter-spacing: inherit;
+      border: none;
+      background: transparent;
     }
 
-    /* --------------------------------------------------------------------------
-       4. Слой HUD: интерфейсный оверлей
-       -------------------------------------------------------------------------- */
-    @layer hud {
-      .hud {
-        position: fixed;
-        inset: 0;
-        z-index: 10;
-        pointer-events: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: clamp(1rem, 3vw, 2.5rem);
-        transition: opacity 0.35s ease;
-      }
-
-      body.modal-open .hud {
-        opacity: 0.2;
-      }
-
-      .hud-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        inline-size: 100%;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.55rem;
-        background: oklch(from var(--surface-card-base) l c h / 0.6);
-        border: 1px solid var(--border-subtle);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        padding-inline: 0.85rem;
-        padding-block: 0.4rem;
-        border-radius: 9999px;
-        font-size: clamp(0.58rem, 1.5vw, 0.65rem);
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--text-primary);
-      }
-
-      .badge-dot {
-        inline-size: 6px;
-        block-size: 6px;
-        border-radius: 50%;
-        background: var(--color-solar);
-        box-shadow: 0 0 8px var(--color-solar);
-        flex-shrink: 0;
-      }
-
-      .hint {
-        font-size: clamp(0.56rem, 1.4vw, 0.65rem);
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--color-solar);
-        background: oklch(from var(--surface-card-base) l c h / 0.5);
-        border: 1px solid var(--border-subtle);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        padding-inline: 0.85rem;
-        padding-block: 0.4rem;
-        border-radius: 9999px;
-        white-space: nowrap;
-      }
-
-      @media (max-width: 640px) {
-        .hint { display: none; }
-      }
-
-      .hud-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        max-inline-size: 70%;
-      }
-
-      .title-block h1 {
-        font-size: clamp(0.95rem, 2.5vw, 1.25rem);
-        font-weight: 400;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--text-primary);
-        margin-block-end: 0.25rem;
-        line-height: 1.25;
-        text-wrap: balance;
-      }
-
-      .title-block p {
-        font-size: clamp(0.6rem, 1.4vw, 0.68rem);
-        letter-spacing: 0.06em;
-        color: var(--text-muted);
-        max-inline-size: 480px;
-        line-height: 1.45;
-        text-wrap: pretty;
-      }
-
-      @media (max-width: 768px) {
-        .hud-bottom { max-inline-size: 100%; }
-      }
+    #webgl {
+      position: fixed;
+      inset: 0;
+      inline-size: 100vw;
+      block-size: 100svh;
+      block-size: 100dvh;
+      display: block;
+      z-index: 1;
+      touch-action: none;
     }
 
-    /* --------------------------------------------------------------------------
-       5. Слой Components: пуленепробиваемое центрирование через Flexbox
-       -------------------------------------------------------------------------- */
-    @layer components {
-      /* Базовый контейнер */
-      .workshop-modal-wrap {
-        position: fixed;
-        z-index: 100;
-        pointer-events: none;
-      }
+    /* HUD Оверлей с учетом Safe-Area */
+    .hud {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-block-start: max(clamp(0.75rem, 2.5vw, 2rem), env(safe-area-inset-top, 0px));
+      padding-block-end: max(clamp(0.75rem, 2.5vw, 2rem), env(safe-area-inset-bottom, 0px));
+      padding-inline-start: max(clamp(0.75rem, 2.5vw, 2rem), env(safe-area-inset-left, 0px));
+      padding-inline-end: max(clamp(0.75rem, 2.5vw, 2rem), env(safe-area-inset-right, 0px));
+      transition: opacity 0.25s ease;
+    }
 
-      /* Открытое состояние: идеальный флекс-центр на весь экран */
-      .workshop-modal-wrap:not(.minimized) {
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-      }
+    body.modal-open .hud {
+      opacity: 0.18;
+    }
 
-      /* Свернутое состояние на десктопе: правый нижний угол */
+    .hud-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      inline-size: 100%;
+    }
+
+    .hud-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      max-inline-size: 70%;
+    }
+
+    @media (max-width: 768px) {
+      .hud-bottom { max-inline-size: 100%; }
+    }
+
+    /* Каркас модального контейнера */
+    .workshop-modal-wrap {
+      position: fixed;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    /* Развернутое состояние: центрирование с защитой от вырезов экрана */
+    .workshop-modal-wrap:not(.minimized) {
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-block-start: max(clamp(0.5rem, 1.5svh, 1rem), env(safe-area-inset-top, 0px));
+      padding-block-end: max(clamp(0.5rem, 1.5svh, 1rem), env(safe-area-inset-bottom, 0px));
+      padding-inline-start: max(clamp(0.5rem, 2vw, 1rem), env(safe-area-inset-left, 0px));
+      padding-inline-end: max(clamp(0.5rem, 2vw, 1rem), env(safe-area-inset-right, 0px));
+    }
+
+    /* Свернутое состояние: правый нижний угол над заголовком */
+    .workshop-modal-wrap.minimized {
+      inset: auto;
+      inset-block-end: max(clamp(1rem, 2.5vw, 2rem), env(safe-area-inset-bottom, 0px));
+      inset-inline-end: max(clamp(1rem, 2.5vw, 2rem), env(safe-area-inset-right, 0px));
+      display: block;
+    }
+
+    @media (max-width: 640px) {
       .workshop-modal-wrap.minimized {
-        inset: auto;
-        inset-block-end: clamp(1rem, 3vw, 2rem);
-        inset-inline-end: clamp(1rem, 3vw, 2.5rem);
-        display: block;
-      }
-
-      /* Свернутое состояние на мобильных: строго над нижним заголовком */
-      @media (max-width: 640px) {
-        .workshop-modal-wrap.minimized {
-          inset-block-end: calc(4.6rem + env(safe-area-inset-bottom, 0px));
-          inset-inline-end: clamp(0.75rem, 3vw, 1.25rem);
-        }
-      }
-
-      /* Сама карточка */
-      .workshop-card {
-        pointer-events: auto;
-        inline-size: min(520px, 100%);
-        max-block-size: calc(100svh - 2rem);
-        background-color: var(--surface-card-glass);
-        border: 1px solid var(--border-solar);
-        border-radius: 14px;
-        padding-inline: clamp(1rem, 2.5vw, 1.6rem);
-        padding-block: clamp(0.85rem, 2.2svh, 1.4rem);
-        box-shadow: var(--shadow-ambient), var(--shadow-specular-edge);
-        backdrop-filter: blur(14px) saturate(130%);
-        -webkit-backdrop-filter: blur(14px) saturate(130%);
-        overflow: hidden;
-        position: relative;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
-        display: flex;
-        flex-direction: column;
-        outline: 1px solid transparent;
-        outline-offset: -1px;
-        user-select: text;
-        transition: background-color 0.25s ease, border-color 0.25s ease;
-      }
-
-      /* Карточка в свернутом виде (пилюля) */
-      .workshop-modal-wrap.minimized .workshop-card {
-        inline-size: auto;
-        max-block-size: none;
-        padding-inline: 1.1rem;
-        padding-block: 0.6rem;
-        border-radius: 9999px;
-        cursor: pointer;
-        background-color: var(--surface-card-minimized);
-        border-color: var(--border-solar);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-        user-select: none;
-      }
-
-      @media (max-width: 640px) {
-        .workshop-modal-wrap.minimized .workshop-card {
-          padding-inline: 0.95rem;
-          padding-block: 0.5rem;
-        }
-      }
-
-      .workshop-modal-wrap.minimized .workshop-card:hover {
-        background-color: oklch(from var(--surface-card-base) calc(l + 0.05) c h / 0.85);
-        border-color: var(--border-solar-hover);
-        transform: translateY(-2px);
-      }
-
-      /* Переключение содержимого */
-      .full-content {
-        display: block;
-      }
-
-      .workshop-modal-wrap.minimized .full-content {
-        display: none;
-      }
-
-      .mini-badge {
-        display: none;
-        align-items: center;
-        gap: 0.6rem;
-        font-size: 0.68rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--color-solar);
-        white-space: nowrap;
-      }
-
-      .workshop-modal-wrap.minimized .mini-badge {
-        display: flex;
-      }
-
-      @media (max-width: 640px) {
-        .mini-badge {
-          font-size: 0.64rem;
-          gap: 0.5rem;
-        }
-      }
-
-      .badge-amber-dot {
-        inline-size: 6px;
-        block-size: 6px;
-        border-radius: 50%;
-        background-color: var(--color-solar);
-        box-shadow: 0 0 6px var(--color-solar);
-        flex-shrink: 0;
-      }
-
-      .card-top-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-block-end: clamp(0.35rem, 1svh, 0.65rem);
-        gap: 0.6rem;
-      }
-
-      .modal-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        font-size: clamp(0.55rem, 1.2svh, 0.62rem);
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--color-solar);
-        background: var(--color-solar-glow);
-        border: 1px solid var(--border-solar);
-        padding-inline: 0.55rem;
-        padding-block: clamp(0.2rem, 0.6svh, 0.3rem);
-        border-radius: 5px;
-      }
-
-      .btn-close-icon {
-        cursor: pointer;
-        border: 1px solid var(--border-subtle);
-        color: var(--text-muted);
-        inline-size: clamp(22px, 3svh, 26px);
-        block-size: clamp(22px, 3svh, 26px);
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: clamp(0.7rem, 1.5svh, 0.82rem);
-        transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-      }
-
-      .btn-close-icon:hover {
-        color: var(--text-primary);
-        border-color: var(--border-solar-hover);
-        background-color: oklch(1 0 0 / 0.08);
-      }
-
-      .modal-title {
-        font-size: clamp(1.15rem, 2.8svh, 1.55rem);
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        color: var(--text-primary);
-        margin-block-end: clamp(0.1rem, 0.4svh, 0.2rem);
-        line-height: 1.15;
-        text-wrap: balance;
-      }
-
-      .modal-subtitle {
-        font-size: clamp(0.6rem, 1.3svh, 0.72rem);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--color-cyan);
-        margin-block-end: clamp(0.45rem, 1.2svh, 0.8rem);
-        line-height: 1.3;
-      }
-
-      .modal-desc {
-        color: var(--text-secondary);
-        margin-block-end: clamp(0.45rem, 1.3svh, 0.85rem);
-      }
-
-      .desc-lead {
-        font-size: clamp(0.68rem, 1.45svh, 0.78rem);
-        line-height: 1.45;
-        margin-block-end: clamp(0.3rem, 0.9svh, 0.55rem);
-        text-wrap: pretty;
-      }
-
-      .desc-block-title {
-        color: var(--color-solar);
-        font-weight: 600;
-        font-size: clamp(0.65rem, 1.35svh, 0.74rem);
-        margin-block-end: clamp(0.2rem, 0.5svh, 0.35rem);
-        letter-spacing: 0.02em;
-      }
-
-      .desc-list {
-        list-style: none;
-        padding-inline-start: 0;
-        margin-block: 0 clamp(0.35rem, 0.9svh, 0.6rem);
-      }
-
-      .desc-list li {
-        position: relative;
-        padding-inline-start: 0.85rem;
-        font-size: clamp(0.65rem, 1.35svh, 0.75rem);
-        line-height: 1.38;
-        margin-block-end: clamp(0.12rem, 0.4svh, 0.22rem);
-        color: var(--text-secondary);
-      }
-
-      .desc-list li::before {
-        content: "•";
-        position: absolute;
-        inset-inline-start: 0;
-        color: var(--color-solar);
-        font-weight: bold;
-      }
-
-      .desc-footer-note {
-        font-size: clamp(0.64rem, 1.3svh, 0.73rem);
-        line-height: 1.4;
-        color: var(--text-muted);
-        text-wrap: pretty;
-      }
-
-      .modal-stack {
-        display: flex;
-        flex-wrap: wrap;
-        gap: clamp(0.2rem, 0.5svh, 0.35rem);
-        margin-block-end: clamp(0.5rem, 1.4svh, 0.95rem);
-      }
-
-      .stack-pill {
-        background-color: oklch(1 0 0 / 0.05);
-        border: 1px solid var(--border-subtle);
-        padding-inline: clamp(0.38rem, 0.9vw, 0.55rem);
-        padding-block: clamp(0.15rem, 0.4svh, 0.24rem);
-        border-radius: 4px;
-        font-size: clamp(0.55rem, 1.15svh, 0.62rem);
-        letter-spacing: 0.02em;
-        color: var(--text-secondary);
-        line-height: 1.2;
-      }
-
-      .modal-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.6rem;
-        padding-block-start: clamp(0.45rem, 1svh, 0.75rem);
-        border-block-start: 1px solid var(--border-subtle);
-        flex-wrap: nowrap;
-      }
-
-      .modal-contacts {
-        display: flex;
-        gap: clamp(0.35rem, 0.8vw, 0.5rem);
-        flex-wrap: wrap;
-      }
-
-      .btn-contact {
-        cursor: pointer;
-        background-color: var(--color-solar-glow);
-        border: 1px solid var(--border-solar);
-        color: var(--color-solar);
-        padding-inline: clamp(0.55rem, 1.3vw, 0.8rem);
-        padding-block: clamp(0.32rem, 0.75svh, 0.44rem);
-        border-radius: 5px;
-        font-size: clamp(0.58rem, 1.2svh, 0.64rem);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        text-decoration: none;
-        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-        text-align: center;
-        line-height: 1.2;
-      }
-
-      .btn-contact:hover {
-        background-color: color-mix(in oklch, var(--color-solar) 28%, transparent);
-        border-color: var(--border-solar-hover);
-        color: #ffffff;
-      }
-
-      .btn-minimize-bottom {
-        cursor: pointer;
-        background-color: oklch(1 0 0 / 0.04);
-        border: 1px solid var(--border-subtle);
-        color: var(--text-muted);
-        padding-inline: clamp(0.55rem, 1.3vw, 0.75rem);
-        padding-block: clamp(0.32rem, 0.75svh, 0.44rem);
-        border-radius: 5px;
-        font-size: clamp(0.58rem, 1.2svh, 0.64rem);
-        white-space: nowrap;
-        line-height: 1.2;
-        transition: color 0.2s ease, border-color 0.2s ease;
-      }
-
-      .btn-minimize-bottom:hover {
-        color: #ffffff;
-        border-color: var(--border-solar-hover);
+        inset-block-end: calc(4.8rem + env(safe-area-inset-bottom, 0px));
+        inset-inline-end: max(clamp(0.75rem, 3vw, 1.25rem), env(safe-area-inset-right, 0px));
       }
     }
 
-    /* --------------------------------------------------------------------------
-       6. Слой a11y: безопасные щиты инклюзивности
-       -------------------------------------------------------------------------- */
-    @layer a11y {
-      /* Щит 1: Защита при уменьшении прозрачности */
-      @media (prefers-reduced-transparency: reduce) {
-        .workshop-card, 
-        .workshop-modal-wrap.minimized .workshop-card,
-        .badge, 
-        .hint {
-          background-color: #0b1120 !important;
-          backdrop-filter: none !important;
-          -webkit-backdrop-filter: none !important;
-        }
-      }
-
-      /* Щит 2: Высокая контрастность Windows (forced-colors) */
-      @media (forced-colors: active) {
-        .workshop-card,
-        .btn-contact,
-        .badge,
-        .hint,
-        .stack-pill,
-        .btn-close-icon,
-        .btn-minimize-bottom {
-          forced-color-adjust: auto;
-          outline: 1px solid ButtonBorder !important;
-          outline-offset: -1px;
-          border-color: CanvasText !important;
-        }
-        .badge-dot, .badge-amber-dot {
-          background-color: Highlight !important;
-          box-shadow: none !important;
-        }
-      }
-
-      /* Щит 3: Безопасное отключение анимаций (без поломки позиционирования) */
-      @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
-          transition-duration: 0.001ms !important;
-          scroll-behavior: auto !important;
-        }
-      }
+    .workshop-card,
+    .btn-restore {
+      pointer-events: auto;
     }
+
+    /* Переключение состояний через display (Zero CLS) */
+    .workshop-card { display: flex; }
+    .workshop-modal-wrap.minimized .workshop-card { display: none !important; }
+
+    .btn-restore { display: none; }
+    .workshop-modal-wrap.minimized .btn-restore { display: inline-flex; }
   </style>
 
-  <!-- Three.js Engine -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Единственное корректное подключение основного файла стилей -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Three.js Engine (Аудит версии вынесен в сопроводительную записку) -->
+  <script src="three.min.js"></script>
 </head>
 <body class="modal-open">
   <canvas id="webgl"></canvas>
 
   <!-- Фоновый информационный слой -->
-  <header class="hud">
+  <header class="hud" aria-hidden="true">
     <div class="hud-top">
       <div class="badge">
         <span class="badge-dot"></span>
@@ -660,66 +218,117 @@
     </div>
   </header>
 
-  <!-- Главный семантический контент -->
-  <main class="workshop-modal-wrap" id="modalWrap" aria-label="Визитная карточка инженера">
-    <article class="workshop-card" id="modalCard">
-      <!-- Свернутый вид: бейдж -->
-      <div class="mini-badge" id="miniBadge">
-        <span class="badge-amber-dot"></span>
-        <span>Развернуть</span>
+  <!-- Интерактивный компонент визитки -->
+  <main class="workshop-modal-wrap" id="modalWrap">
+    
+    <!-- Настоящий доступный элемент-кнопка для разворачивания (Hit target 44px+) -->
+    <button type="button" 
+            class="btn-restore" 
+            id="btnRestore" 
+            aria-label="Развернуть визитную карточку инженера"
+            aria-controls="modalCard"
+            aria-expanded="false">
+      <span class="badge-amber-dot" aria-hidden="true"></span>
+      <span>Развернуть</span>
+    </button>
+
+    <!-- Полноценный семантический диалог (Section role=dialog) -->
+    <section class="workshop-card" 
+             id="modalCard" 
+             role="dialog" 
+             aria-modal="false"
+             aria-labelledby="modalTitle" 
+             aria-describedby="modalSubtitle">
+      
+      <div class="card-top-row">
+        <div class="modal-tag">
+          <span class="badge-amber-dot" aria-hidden="true"></span>
+          <span>РАЗРАБОТКА ПО И АВТОМАТИЗАЦИЯ</span>
+        </div>
+        <button type="button" 
+                class="btn-close-icon" 
+                id="btnCloseTop" 
+                aria-label="Свернуть карточку" 
+                title="Свернуть">✕</button>
       </div>
 
-      <!-- Полный контент карточки -->
-      <div class="full-content" id="fullContent">
-        <div class="card-top-row">
-          <div class="modal-tag">
-            <span class="badge-amber-dot"></span>
-            <span>РАЗРАБОТКА ПО И АВТОМАТИЗАЦИЯ</span>
-          </div>
-          <button class="btn-close-icon" id="btnCloseTop" aria-label="Свернуть карточку" title="Свернуть">✕</button>
-        </div>
+      <h2 class="modal-title" id="modalTitle">Владимир Гордеев</h2>
+      <div class="modal-subtitle" id="modalSubtitle">Web • IoT & ПЛК • Python • ПО на заказ</div>
 
-        <h2 class="modal-title">Владимир Гордеев</h2>
-        <div class="modal-subtitle">Web • IoT & ПЛК • Python • ПО на заказ</div>
-
-        <div class="modal-desc">
-          <p class="desc-lead">Разрабатываю программное обеспечение под ключ и создаю решения на стыке веб-технологий и аппаратной автоматизации.</p>
-          <div class="desc-block-title">Ключевые компетенции:</div>
-          <ul class="desc-list">
-            <li>Веб-сервисы, отказоустойчивый бэкенд и интеграции API</li>
-            <li>IoT-устройства, микроконтроллеры (ESP32, Arduino) и ПЛК</li>
-            <li>Python: автоматизация, парсинг данных, Telegram-боты</li>
-            <li>Разработка прикладных программ под нестандартные задачи бизнеса</li>
-          </ul>
-          <p class="desc-footer-note">Открыт к проектам и сотрудничеству. Напишите задачу — предложу стек и архитектуру.</p>
-        </div>
-
-        <section class="modal-stack" aria-label="Стек технологий">
-          <span class="stack-pill">Python</span>
-          <span class="stack-pill">Web Dev</span>
-          <span class="stack-pill">Telegram Bots</span>
-          <span class="stack-pill">ESP32 / Arduino</span>
-          <span class="stack-pill">ПЛК / Automation</span>
-          <span class="stack-pill">C / C++ (Embedded)</span>
-          <span class="stack-pill">IoT / MQTT / Modbus</span>
-          <span class="stack-pill">SQL / Базы данных</span>
-          <span class="stack-pill">REST API</span>
-          <span class="stack-pill">Docker / Linux</span>
-        </section>
-
-        <footer class="modal-footer">
-          <div class="modal-contacts">
-            <a href="https://t.me/LoftCreator" target="_blank" rel="noopener noreferrer" class="btn-contact">Telegram</a>
-            
-            <a href="mailto:dev@vladimir-gordeev.ru" class="btn-contact">Email</a>
-          </div>
-          <button class="btn-minimize-bottom" id="btnMinimizeBottom">Свернуть —</button>
-        </footer>
+      <div class="modal-desc">
+        <p class="desc-lead">Разрабатываю программное обеспечение под ключ и создаю решения на стыке веб-технологий и аппаратной автоматизации.</p>
+        <div class="desc-block-title">Ключевые компетенции:</div>
+        <ul class="desc-list">
+          <li>Веб-сервисы, отказоустойчивый бэкенд и интеграции API</li>
+          <li>IoT-устройства, микроконтроллеры (ESP32, Arduino) и ПЛК</li>
+          <li>Python: автоматизация, парсинг данных, Telegram-боты</li>
+          <li>Разработка прикладных программ под нестандартные задачи бизнеса</li>
+        </ul>
+        <p class="desc-footer-note">Открыт к проектам и сотрудничеству. Напишите задачу — предложу стек и архитектуру.</p>
       </div>
-    </article>
+
+      <section class="modal-stack" aria-label="Стек технологий">
+        <span class="stack-pill">Python</span>
+        <span class="stack-pill">Web Dev</span>
+        <span class="stack-pill">Telegram Bots</span>
+        <span class="stack-pill">ESP32 / Arduino</span>
+        <span class="stack-pill">ПЛК / Automation</span>
+        <span class="stack-pill">C / C++ (Embedded)</span>
+        <span class="stack-pill">IoT / MQTT / Modbus</span>
+        <span class="stack-pill">SQL / Базы данных</span>
+        <span class="stack-pill">REST API</span>
+        <span class="stack-pill">Docker / Linux</span>
+      </section>
+
+      <footer class="modal-footer">
+		  <div class="modal-contacts">
+			<a href="https://t.me/LoftCreator" target="_blank" rel="noopener noreferrer" class="btn-contact">Telegram</a>
+			<a href="mailto:dev@vladimir-gordeev.ru" class="btn-contact">Email</a>
+		  </div>
+		  <!-- Ссылка для формального комплаенса 152-ФЗ -->
+		  <a href="/privacy.html" class="privacy-link">Политика конфиденциальности</a>
+		  <button type="button" class="btn-minimize-bottom" id="btnMinimizeBottom">Свернуть —</button>
+	 </footer>
+
+    </section>
   </main>
 
-  <!-- Модули системы Three.js -->
+  <!-- Скрипт доступности диалога (Управление фокусом и Escape) -->
+  <script>
+    (function() {
+      const wrap = document.getElementById('modalWrap');
+      const btnCloseTop = document.getElementById('btnCloseTop');
+      const btnMinimizeBottom = document.getElementById('btnMinimizeBottom');
+      const btnRestore = document.getElementById('btnRestore');
+
+      function minimizeCard() {
+        wrap.classList.add('minimized');
+        document.body.classList.remove('modal-open');
+        btnRestore.setAttribute('aria-expanded', 'false');
+        btnRestore.focus();
+      }
+
+      function expandCard() {
+        wrap.classList.remove('minimized');
+        document.body.classList.add('modal-open');
+        btnRestore.setAttribute('aria-expanded', 'true');
+        btnCloseTop.focus();
+      }
+
+      btnCloseTop.addEventListener('click', minimizeCard);
+      btnMinimizeBottom.addEventListener('click', minimizeCard);
+      btnRestore.addEventListener('click', expandCard);
+
+      // Закрытие по клавише Escape
+      window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !wrap.classList.contains('minimized')) {
+          minimizeCard();
+        }
+      });
+    })();
+  </script>
+
+  <!-- Модули трехмерной сцены -->
   <script src="cosmos.js"></script>
   <script src="dust.js"></script>
   <script src="mist.js"></script> 
