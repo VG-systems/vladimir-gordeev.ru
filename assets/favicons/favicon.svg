@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Глубокий бархатный фон: матовый темный обсидиан -->
+    <radialGradient id="lux-noir" cx="50%" cy="45%" r="72%">
+      <stop offset="0%" stop-color="#151824"/>
+      <stop offset="60%" stop-color="#090B10"/>
+      <stop offset="100%" stop-color="#020305"/>
+    </radialGradient>
+
+    <!-- Сатинированная платина и шампанское золото -->
+    <linearGradient id="solid-metal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="16%" stop-color="#F6F0E8"/>
+      <stop offset="40%" stop-color="#D7C8B3"/>
+      <stop offset="65%" stop-color="#91816B"/>
+      <stop offset="86%" stop-color="#C5B69F"/>
+      <stop offset="100%" stop-color="#FAF7F2"/>
+    </linearGradient>
+
+    <!-- Алмазная фаска среза (световой блик) -->
+    <linearGradient id="bevel-sheen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="40%" stop-color="#EADDC9" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#8F7E66" stop-opacity="0.2"/>
+    </linearGradient>
+
+    <!-- Тончайший ювелирный кант сквиркла -->
+    <linearGradient id="border-metal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D7C8B3" stop-opacity="0.6"/>
+      <stop offset="35%" stop-color="#334155" stop-opacity="0.15"/>
+      <stop offset="70%" stop-color="#0F172A" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#F6F0E8" stop-opacity="0.45"/>
+    </linearGradient>
+
+    <!-- Глубокая объемная тень литого знака -->
+    <filter id="monolith-depth" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.92"/>
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.7"/>
+    </filter>
+
+    <!-- Мягкий рассеянный свет вокруг монограммы -->
+    <radialGradient id="ambient-warmth" cx="70%" cy="60%" r="65%">
+      <stop offset="0%" stop-color="#D7C8B3" stop-opacity="0.19"/>
+      <stop offset="80%" stop-color="#D7C8B3" stop-opacity="0.01"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ========================================================= -->
+  <!-- 1. КОРПУС СКВИРКЛА                                        -->
+  <!-- ========================================================= -->
+  <rect width="512" height="512" rx="120" fill="url(#lux-noir)"/>
+
+  <!-- Мягкое глубинное свечение подложки -->
+  <circle cx="256" cy="256" r="210" fill="url(#ambient-warmth)"/>
+
+  <!-- Тонкий кант 1.5px по периметру -->
+  <rect x="2" y="2" width="508" height="508" rx="118" fill="none" stroke="url(#border-metal)" stroke-width="2"/>
+
+  <!-- ========================================================= -->
+  <!-- 2. МОНОГРАММА «В.Г.» С ТОЧКАМИ (КРУПНЫЙ МАСШТАБ)          -->
+  <!-- ========================================================= -->
+  <g filter="url(#monolith-depth)">
+
+    <!-- Буква «В» -->
+    <path d="
+      M 71 144
+      H 166
+      C 202 144 223 162 223 192
+      C 223 212 211 227 192 234
+      C 215 242 227 260 227 292
+      C 227 334 202 368 164 368
+      H 71
+      V 144 Z
+
+      M 109 180
+      V 220
+      H 158
+      C 175 220 185 212 185 200
+      C 185 188 175 180 158 180
+      H 109 Z
+
+      M 109 256
+      V 332
+      H 160
+      C 178 332 189 320 189 294
+      C 189 268 178 256 160 256
+      H 109 Z
+    "
+    fill="url(#solid-metal)"
+    fill-rule="evenodd"/>
+
+    <!-- Фаска буквы «В» -->
+    <path d="
+      M 71 144
+      H 166
+      C 198 144 218 158 221 180
+      C 216 164 195 148 164 148
+      H 76
+      V 368
+      H 71
+      V 144 Z
+    "
+    fill="url(#bevel-sheen)"/>
+
+    <!-- Первая точка «.» (после В) -->
+    <circle cx="242" cy="354" r="14" fill="url(#solid-metal)"/>
+    <path d="M 234 354 A 14 14 0 0 1 262 354 A 14 14 0 0 0 234 354 Z" fill="url(#bevel-sheen)"/>
+
+    <!-- Буква «Г» -->
+    <path d="
+      M 276 144
+      H 404
+      V 180
+      H 314
+      V 368
+      H 276
+      V 144
+      Z
+    "
+    fill="url(#solid-metal)"/>
+
+    <!-- Фаска буквы «Г» -->
+    <path d="
+      M 276 144
+      H 404
+      V 148
+      H 280
+      V 368
+      H 276
+      V 144
+      Z
+    "
+    fill="url(#bevel-sheen)"/>
+
+    <!-- Вторая точка «.» (после Г) -->
+    <circle cx="342" cy="354" r="14" fill="url(#solid-metal)"/>
+    <path d="M 418 354 A 14 14 0 0 1 446 354 A 14 14 0 0 0 418 354 Z" fill="url(#bevel-sheen)"/>
+
+  </g>
+
+</svg>
