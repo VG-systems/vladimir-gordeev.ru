@@ -1,7 +1,7 @@
-window.createMist = function(scene) {
-  // Адаптивное число сгустков: 18 на смартфонах исключает fill-rate перегрузку FBM-шума
+window.createMist = function(scene, isSoftware) {
+  // Адаптивное число сгустков: исключает fill-rate перегрузку FBM-шума
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const count = isMobile ? 18 : 40;
+  const count = isSoftware ? 8 : (isMobile ? 12 : 20);
   const geo = new THREE.BufferGeometry();
 
   const positions = new Float32Array(count * 4 * 3);

@@ -1,4 +1,4 @@
-window.createWater = function(scene, sunPosition) {
+window.createWater = function(scene, sunPosition, isSoftware) {
   const waterVertexShader = `
     uniform float uTime;
     varying vec3 vWorldPos;
@@ -171,10 +171,10 @@ window.createWater = function(scene, sunPosition) {
     }
   `;
 
-  // Оптимизированная сетка: 50 сегментов на смартфонах устраняют CPU-узкое место,
-  // при этом на маленьком экране качество неотличимо благодаря карте нормалей
+  // Оптимизированная геометрия: 32 для программного SwiftShader, 40 для мобильных, 64 для аппаратного GPU.
+  // Устраняет узкое место в 68 121 вершину без визуальных потерь благодаря попиксельному расчету нормалей.
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const segments = isMobile ? 50 : 260;
+  const segments = isSoftware ? 32 : (isMobile ? 40 : 64);
   const oceanGeo = new THREE.PlaneGeometry(550, 550, segments, segments);
   oceanGeo.rotateX(-Math.PI / 2);
 

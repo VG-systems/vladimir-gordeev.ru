@@ -1,4 +1,5 @@
-window.createSun = function(scene) {
+window.createSun = function(scene, isSoftware) {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const sunGroup = new THREE.Group();
 
   // ================================================================
@@ -8,9 +9,10 @@ window.createSun = function(scene) {
   sunGroup.position.copy(position);
 
   // ================================================================
-  // 1. СОЛНЕЧНОЕ ЯДРО
+  // 1. СОЛНЕЧНОЕ ЯДРО (оптимизированное число сегментов)
   // ================================================================
-  const coreGeo = new THREE.SphereGeometry(15.5, 64, 64);
+  const coreSegments = isSoftware ? 20 : (isMobile ? 24 : 36);
+  const coreGeo = new THREE.SphereGeometry(15.5, coreSegments, coreSegments);
 
   const coreMat = new THREE.ShaderMaterial({
     uniforms: {
@@ -100,7 +102,7 @@ window.createSun = function(scene) {
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
-      depthTest: true, // Включено: не лезет поверх океана
+      depthTest: true,
       uniforms: {
         intensity: { value: intensity },
         falloff: { value: falloff }
@@ -159,7 +161,7 @@ window.createSun = function(scene) {
     transparent: true,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
-    depthTest: true, // Включено: не дает среза на переднем плане
+    depthTest: true,
     vertexShader: `
       varying vec2 vUv;
       void main() {
@@ -196,7 +198,7 @@ window.createSun = function(scene) {
     transparent: true,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
-    depthTest: true, // Включено: корректно уходит за горизонт
+    depthTest: true,
     vertexShader: `
       varying vec2 vUv;
       void main() {

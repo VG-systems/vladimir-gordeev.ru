@@ -1,7 +1,7 @@
-window.createDust = function(scene) {
-  // Адаптивное число частиц: 700 на смартфонах достаточно для плотного эффекта
+window.createDust = function(scene, isSoftware) {
+  // Адаптивное число частиц: 300 в программном режиме, 600 на мобильных, 1000 на десктопе
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const dustCount = isMobile ? 700 : 2000;
+  const dustCount = isSoftware ? 300 : (isMobile ? 600 : 1000);
   const dustGeo = new THREE.BufferGeometry();
   const dustPos = new Float32Array(dustCount * 3);
   const dustSeed = new Float32Array(dustCount);
