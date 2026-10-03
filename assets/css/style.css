@@ -1,124 +1,101 @@
 /* ==========================================================================
-   PRODUCTION STYLESHEET — DUAL-AXIS RESPONSIVE & ACCESSIBLE ENGINE
+   PRODUCTION STYLESHEET — INDUSTRIAL PRECISION & SWISS CRAFT
+   (Устранение шаблонов ИИ: строгая иерархия, физичность материалов, прецизионная верстка)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. Семантические токены дизайна
+   1. Семантическая дизайн-система
    -------------------------------------------------------------------------- */
 :root {
   color-scheme: dark;
 
-  /* Базовые цветовые оси OKLCH */
-  --hue-brand: 255;
-  --hue-solar: 82;
-  --hue-cyan: 212;
+  /* Шрифтовой дуэт: швейцарский гротеск для чтения + моно для спецификаций */
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
 
-  /* Фоновые поверхности */
+  /* Палитра благородных материалов: обсидиан, титан, полированная латунь */
   --surface-ground: #020307;
-  --surface-solid-fallback: #0b0f19;
-  --surface-card: oklch(0.14 0.03 var(--hue-brand) / 0.82);
-  --surface-btn-restore: oklch(0.16 0.035 var(--hue-brand) / 0.94);
-  --surface-hud: oklch(0.12 0.025 var(--hue-brand) / 0.72);
+  --surface-chassis: oklch(0.13 0.015 255 / 0.88);
+  --surface-panel: rgba(18, 22, 31, 0.72);
+  --surface-subtle: rgba(255, 255, 255, 0.04);
+  --surface-hover: rgba(255, 255, 255, 0.08);
 
-  /* Интерактивные поверхности */
-  --surface-interactive: oklch(1 0 0 / 0.06);
-  --surface-interactive-hover: oklch(1 0 0 / 0.12);
-  --surface-interactive-active: oklch(1 0 0 / 0.18);
+  /* Металлические и технические акценты */
+  --accent-solar: #e2c366;           /* Спокойное инженерное золото/латунь */
+  --accent-solar-soft: rgba(226, 195, 102, 0.12);
+  --accent-solar-hover: #f0d482;
+  --accent-cyan: #7dc4e8;
 
-  --surface-accent-soft: oklch(0.85 0.16 var(--hue-solar) / 0.14);
-  --surface-accent-hover: oklch(0.85 0.16 var(--hue-solar) / 0.25);
-  --surface-accent-active: oklch(0.85 0.16 var(--hue-solar) / 0.35);
+  /* Тончайшие прецизионные фаски и границы (hairline borders) */
+  --border-hairline: rgba(255, 255, 255, 0.10);
+  --border-chassis: rgba(255, 255, 255, 0.14);
+  --border-focus: rgba(226, 195, 102, 0.65);
 
-  /* Границы */
-  --border-subtle: oklch(0.96 0.005 var(--hue-brand) / 0.15);
-  --border-subtle-hover: oklch(0.96 0.005 var(--hue-brand) / 0.34);
-  --border-accent: oklch(0.85 0.16 var(--hue-solar) / 0.38);
-  --border-accent-hover: oklch(0.85 0.16 var(--hue-solar) / 0.78);
+  /* Высококонтрастная типографика */
+  --text-pure: #ffffff;
+  --text-primary: #e6e8ee;
+  --text-secondary: #9aa1b2;
+  --text-muted: #656d80;
 
-  /* Типографика (Контраст 7+:1 к фону) */
-  --text-primary: oklch(0.98 0.005 var(--hue-brand));
-  --text-secondary: oklch(0.88 0.015 var(--hue-brand));
-  --text-muted: oklch(0.74 0.02 var(--hue-brand));
-  --text-accent: oklch(0.86 0.16 var(--hue-solar));
-  --text-accent-bright: oklch(0.96 0.12 var(--hue-solar));
-  --text-cyan: oklch(0.82 0.11 var(--hue-cyan));
+  /* Прецизионные тени без грязи и неонового яда */
+  --shadow-chassis: 
+    0 24px 64px -12px rgba(0, 0, 0, 0.75),
+    0 4px 16px -2px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
 
-  /* Кольцо фокуса */
-  --focus-ring: oklch(0.88 0.16 var(--hue-solar));
-  --focus-offset: 3px;
-
-  /* Тени */
-  --shadow-sm: 0 2px 6px oklch(0 0 0 / 0.35);
-  --shadow-md: 0 8px 24px -4px oklch(0 0 0 / 0.45);
-  --shadow-modal: 
-    0 4px 12px oklch(0 0 0 / 0.35),
-    0 20px 48px -8px oklch(0 0 0 / 0.65),
-    inset 0 1px 0 0 oklch(1 0 0 / 0.16);
-  --shadow-glow-accent: 0 0 10px oklch(0.85 0.16 var(--hue-solar) / 0.45);
-
-  /* Радиусы */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-card: 12px;
   --radius-pill: 9999px;
 
-  /* Тайминги */
-  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --duration-fast: 150ms;
-  --transition-interactive: 
-    background-color var(--duration-fast) var(--ease-standard),
-    border-color var(--duration-fast) var(--ease-standard),
-    color var(--duration-fast) var(--ease-standard),
-    transform var(--duration-fast) var(--ease-standard),
-    box-shadow var(--duration-fast) var(--ease-standard),
-    opacity var(--duration-fast) var(--ease-standard);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-interactive: 160ms;
 }
 
 /* --------------------------------------------------------------------------
    2. Фоновый информационный слой (HUD)
    -------------------------------------------------------------------------- */
+.hud {
+  font-family: var(--font-mono);
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  background-color: var(--surface-hud);
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  padding-inline: 0.85rem;
-  padding-block: 0.4rem;
-  border-radius: var(--radius-pill);
-  font-size: clamp(0.68rem, 0.64rem + 0.2vw, 0.74rem);
+  gap: 0.6rem;
+  background: var(--surface-panel);
+  border: 1px solid var(--border-hairline);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.38rem 0.85rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.68rem;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
 .badge-dot {
-  inline-size: 6px;
-  block-size: 6px;
-  border-radius: var(--radius-pill);
-  background-color: var(--text-accent);
-  box-shadow: var(--shadow-glow-accent);
-  flex-shrink: 0;
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 50%;
+  background-color: var(--accent-solar);
+  box-shadow: 0 0 6px rgba(226, 195, 102, 0.6);
 }
 
 .hint {
-  font-size: clamp(0.66rem, 0.62rem + 0.2vw, 0.72rem);
+  font-size: 0.68rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-accent);
-  background-color: var(--surface-hud);
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  padding-inline: 0.85rem;
-  padding-block: 0.4rem;
-  border-radius: var(--radius-pill);
-  white-space: nowrap;
+  color: var(--text-muted);
+  background: var(--surface-panel);
+  border: 1px solid var(--border-hairline);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.38rem 0.85rem;
+  border-radius: var(--radius-xs);
 }
 
 @media (max-width: 680px) {
@@ -126,483 +103,363 @@
 }
 
 .title-block h1 {
-  font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.25rem);
+  font-family: var(--font-ui);
+  font-size: clamp(0.95rem, 0.85rem + 0.3vw, 1.15rem);
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-primary);
-  margin-block-end: 0.25rem;
-  line-height: 1.25;
-  text-wrap: balance;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--text-pure);
+  margin-block-end: 0.2rem;
 }
 
 .title-block p {
-  font-size: clamp(0.72rem, 0.68rem + 0.2vw, 0.8rem);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   letter-spacing: 0.02em;
   color: var(--text-muted);
-  max-inline-size: 500px;
-  line-height: 1.4;
-  text-wrap: pretty;
 }
 
 /* --------------------------------------------------------------------------
-   3. Карточка мастерской: Двухосевая адаптивность
+   3. Карточка: Архитектура прибора / Инженерной панели
    -------------------------------------------------------------------------- */
 .workshop-card {
+  font-family: var(--font-ui);
   inline-size: min(520px, 100%);
   max-block-size: min(calc(100svh - 1.5rem), 680px);
   max-block-size: min(calc(100dvh - 1.5rem), 680px);
-  background-color: var(--surface-card);
-  border: 1px solid var(--border-accent);
-  border-radius: var(--radius-lg);
-  padding-inline: clamp(0.9rem, 2.5vw, 1.5rem);
-  padding-block: clamp(0.75rem, 1.8svh, 1.35rem);
-  box-shadow: var(--shadow-modal);
-  backdrop-filter: blur(16px) saturate(120%);
-  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  background-color: var(--surface-chassis);
+  border: 1px solid var(--border-chassis);
+  border-radius: var(--radius-card);
+  padding: clamp(1rem, 2.8vw, 1.7rem);
+  box-shadow: var(--shadow-chassis);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
   position: relative;
   flex-direction: column;
   user-select: text;
-  transition: var(--transition-interactive);
   
-  /* Скролл только при физической нехватке высоты */
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: var(--border-subtle) transparent;
+  scrollbar-color: var(--border-hairline) transparent;
 }
 
 .workshop-card::-webkit-scrollbar {
   inline-size: 4px;
 }
 .workshop-card::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
+  background: var(--border-hairline);
   border-radius: var(--radius-pill);
 }
 
+/* Верхняя служебная плашка */
 .card-top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-block-end: clamp(0.35rem, 1svh, 0.65rem);
+  margin-block-end: 0.75rem;
   gap: 0.6rem;
 }
 
 .modal-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-size: clamp(0.66rem, 0.62rem + 0.15vw, 0.72rem);
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--text-accent);
-  background-color: var(--surface-accent-soft);
-  border: 1px solid var(--border-accent);
-  padding-inline: 0.55rem;
-  padding-block: 0.25rem;
+  color: var(--accent-solar);
+  background: var(--surface-subtle);
+  border: 1px solid rgba(226, 195, 102, 0.22);
+  padding: 0.25rem 0.55rem;
   border-radius: var(--radius-xs);
 }
 
-/* Кнопка закрытия: компактный вид + 44px hit-area */
+.badge-amber-dot {
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 50%;
+  background-color: var(--accent-solar);
+}
+
+/* Кнопка закрытия: строгая, инструментальная */
 .btn-close-icon {
   position: relative;
   cursor: pointer;
-  border: 1px solid var(--border-subtle);
-  background-color: var(--surface-interactive);
-  color: var(--text-muted);
-  inline-size: 30px;
-  block-size: 30px;
+  border: 1px solid var(--border-hairline);
+  background-color: var(--surface-subtle);
+  color: var(--text-secondary);
+  inline-size: 26px;
+  block-size: 26px;
   border-radius: var(--radius-xs);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   line-height: 1;
-  transition: var(--transition-interactive);
+  transition: all var(--duration-interactive) ease;
   flex-shrink: 0;
 }
 
 .btn-close-icon::before {
   content: "";
   position: absolute;
-  inset: -7px;
+  inset: -9px;
   min-inline-size: 44px;
   min-block-size: 44px;
 }
 
 .btn-close-icon:hover {
-  color: var(--text-primary);
-  border-color: var(--border-accent-hover);
-  background-color: var(--surface-interactive-hover);
+  color: var(--text-pure);
+  border-color: var(--border-chassis);
+  background-color: var(--surface-hover);
 }
 
-.btn-close-icon:active {
-  background-color: var(--surface-interactive-active);
-  transform: scale(0.96);
-}
-
+/* Заголовок и подзаголовок */
 .modal-title {
-  font-size: clamp(1.18rem, 1.05rem + 0.5vw, 1.45rem);
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--text-primary);
-  margin-block-end: clamp(0.12rem, 0.4svh, 0.2rem);
-  line-height: 1.2;
-  text-wrap: balance;
+  font-family: var(--font-ui);
+  font-size: clamp(1.35rem, 1.25rem + 0.5vw, 1.65rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--text-pure);
+  margin-block-end: 0.2rem;
+  line-height: 1.15;
 }
 
 .modal-subtitle {
-  font-size: clamp(0.7rem, 0.66rem + 0.18vw, 0.78rem);
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--text-cyan);
-  margin-block-end: clamp(0.45rem, 1.1svh, 0.75rem);
-  line-height: 1.35;
+  color: var(--text-secondary);
+  margin-block-end: 1rem;
+  padding-block-end: 0.75rem;
+  border-block-end: 1px solid var(--border-hairline);
 }
 
+/* Тело описания */
 .modal-desc {
-  color: var(--text-secondary);
-  margin-block-end: clamp(0.45rem, 1.2svh, 0.85rem);
+  margin-block-end: 1.1rem;
 }
 
 .desc-lead {
-  font-size: clamp(0.78rem, 0.74rem + 0.18vw, 0.86rem);
-  line-height: 1.45;
-  margin-block-end: clamp(0.3rem, 0.8svh, 0.5rem);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--text-primary);
+  margin-block-end: 0.85rem;
   text-wrap: pretty;
 }
 
 .desc-block-title {
-  color: var(--text-accent);
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
   font-weight: 600;
-  font-size: clamp(0.74rem, 0.7rem + 0.18vw, 0.82rem);
-  margin-block-end: clamp(0.2rem, 0.5svh, 0.35rem);
-  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-block-end: 0.45rem;
 }
 
 .desc-list {
   list-style: none;
   padding-inline-start: 0;
-  margin-block: 0 clamp(0.3rem, 0.8svh, 0.6rem);
+  margin-block: 0 0.85rem;
 }
 
 .desc-list li {
   position: relative;
-  padding-inline-start: 0.9rem;
-  font-size: clamp(0.74rem, 0.7rem + 0.18vw, 0.82rem);
-  line-height: 1.4;
-  margin-block-end: clamp(0.15rem, 0.4svh, 0.25rem);
+  padding-inline-start: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-block-end: 0.3rem;
   color: var(--text-secondary);
 }
 
+/* Технический маркер вместо круглого неонового кружка */
 .desc-list li::before {
-  content: "•";
+  content: "—";
   position: absolute;
   inset-inline-start: 0;
-  color: var(--text-accent);
-  font-weight: 700;
+  color: var(--accent-solar);
+  font-family: var(--font-mono);
+  font-weight: 400;
 }
 
 .desc-footer-note {
-  font-size: clamp(0.72rem, 0.68rem + 0.18vw, 0.8rem);
-  line-height: 1.4;
+  font-size: 0.78rem;
+  line-height: 1.45;
   color: var(--text-muted);
   text-wrap: pretty;
 }
 
-/* Стек технологий */
+/* Стек технологий: матричная плашка компетенций */
 .modal-stack {
   display: flex;
   flex-wrap: wrap;
-  gap: clamp(0.22rem, 0.5svh, 0.35rem);
-  margin-block-end: clamp(0.5rem, 1.3svh, 0.85rem);
+  gap: 0.32rem;
+  margin-block-end: 1.25rem;
+  padding: 0.65rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
 }
 
 .stack-pill {
-  background-color: var(--surface-interactive);
-  border: 1px solid var(--border-subtle);
-  padding-inline: clamp(0.45rem, 1vw, 0.55rem);
-  padding-block: clamp(0.2rem, 0.5svh, 0.26rem);
+  font-family: var(--font-mono);
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border-hairline);
+  padding: 0.2rem 0.48rem;
   border-radius: var(--radius-xs);
-  font-size: clamp(0.68rem, 0.64rem + 0.15vw, 0.74rem);
+  font-size: 0.67rem;
   letter-spacing: 0.02em;
-  color: var(--text-secondary);
-  line-height: 1.25;
+  color: var(--text-primary);
+  line-height: 1.3;
 }
 
-/* Нижний футер действий */
+/* Нижний блок действий (Четкая иерархия вместо одинаковых кнопок) */
 .modal-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.6rem;
-  padding-block-start: clamp(0.45rem, 1.1svh, 0.75rem);
-  border-block-start: 1px solid var(--border-subtle);
+  gap: 0.75rem;
+  padding-block-start: 0.85rem;
+  border-block-start: 1px solid var(--border-hairline);
   flex-wrap: wrap;
 }
 
 .modal-contacts {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.btn-contact {
+/* Главное действие (Telegram): контрастная полированная кнопка */
+.btn-contact[href*="t.me"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-block-size: 38px;
+  min-block-size: 36px;
   cursor: pointer;
-  background-color: var(--surface-accent-soft);
-  border: 1px solid var(--border-accent);
-  color: var(--text-accent);
-  padding-inline: clamp(0.75rem, 1.5vw, 0.95rem);
-  padding-block: 0.4rem;
+  background-color: var(--accent-solar);
+  border: 1px solid var(--accent-solar);
+  color: #0b0d13;
+  padding-inline: 1rem;
   border-radius: var(--radius-xs);
-  font-size: clamp(0.72rem, 0.68rem + 0.18vw, 0.78rem);
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   text-decoration: none;
-  line-height: 1.2;
-  transition: var(--transition-interactive);
+  transition: all var(--duration-interactive) var(--ease-out-expo);
 }
 
-.btn-contact:hover {
-  background-color: var(--surface-accent-hover);
-  border-color: var(--border-accent-hover);
-  color: var(--text-accent-bright);
+.btn-contact[href*="t.me"]:hover {
+  background-color: var(--accent-solar-hover);
+  border-color: var(--accent-solar-hover);
+  transform: translateY(-1px);
 }
 
-.btn-contact:active {
-  background-color: var(--surface-accent-active);
-  transform: translateY(1px);
+/* Вторичное действие (Email): строгая техническая плашка */
+.btn-contact[href^="mailto:"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 36px;
+  cursor: pointer;
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border-chassis);
+  color: var(--text-primary);
+  padding-inline: 0.9rem;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--duration-interactive) var(--ease-out-expo);
 }
 
+.btn-contact[href^="mailto:"]:hover {
+  background-color: var(--surface-hover);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: var(--text-pure);
+}
+
+/* Ссылка на политику конфиденциальности */
+.privacy-link {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border-hairline);
+  transition: color var(--duration-interactive) ease;
+}
+
+.privacy-link:hover {
+  color: var(--text-secondary);
+  text-decoration-color: var(--text-secondary);
+}
+
+/* Кнопка "Свернуть" */
 .btn-minimize-bottom {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-block-size: 38px;
+  min-block-size: 36px;
   cursor: pointer;
-  background-color: var(--surface-interactive);
-  border: 1px solid var(--border-subtle);
+  background-color: transparent;
+  border: 1px solid var(--border-hairline);
   color: var(--text-muted);
-  padding-inline: 0.8rem;
-  padding-block: 0.4rem;
+  padding-inline: 0.75rem;
   border-radius: var(--radius-xs);
-  font-size: clamp(0.7rem, 0.66rem + 0.18vw, 0.76rem);
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   white-space: nowrap;
-  line-height: 1.2;
-  transition: var(--transition-interactive);
+  transition: all var(--duration-interactive) ease;
 }
 
 .btn-minimize-bottom:hover {
-  color: var(--text-primary);
-  border-color: var(--border-subtle-hover);
-  background-color: var(--surface-interactive-hover);
-}
-
-.btn-minimize-bottom:active {
-  transform: translateY(1px);
-}
-
-/* Адаптация футера для экранов шириной до 360px */
-@media (max-width: 360px) {
-  .modal-footer {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.45rem;
-  }
-  
-  .modal-contacts {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    inline-size: 100%;
-  }
-
-  .btn-minimize-bottom {
-    inline-size: 100%;
-    text-align: center;
-  }
+  color: var(--text-secondary);
+  border-color: var(--border-chassis);
+  background-color: var(--surface-subtle);
 }
 
 /* --------------------------------------------------------------------------
-   4. Свернутое состояние: Доступная кнопка разворачивания
+   4. Кнопка разворачивания (Минималистичный приборный индикатор)
    -------------------------------------------------------------------------- */
 .btn-restore {
   align-items: center;
   gap: 0.65rem;
-  min-block-size: 44px;
-  padding-inline: 1.15rem;
-  padding-block: 0.6rem;
-  border-radius: var(--radius-pill);
+  min-block-size: 40px;
+  padding: 0.5rem 1.05rem;
+  border-radius: var(--radius-xs);
   cursor: pointer;
-  background-color: var(--surface-btn-restore);
-  border: 1px solid var(--border-accent);
-  box-shadow: var(--shadow-md);
-  user-select: none;
-  font-size: clamp(0.72rem, 0.68rem + 0.18vw, 0.78rem);
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  background-color: var(--surface-chassis);
+  border: 1px solid var(--border-chassis);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-accent);
+  color: var(--text-primary);
   white-space: nowrap;
-  transition: var(--transition-interactive);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all var(--duration-interactive) var(--ease-out-expo);
 }
 
 .btn-restore:hover {
-  background-color: oklch(0.20 0.04 var(--hue-brand) / 0.96);
-  border-color: var(--border-accent-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-modal), var(--shadow-glow-accent);
-}
-
-.btn-restore:active {
-  transform: translateY(0);
-}
-
-.badge-amber-dot {
-  inline-size: 6px;
-  block-size: 6px;
-  border-radius: var(--radius-pill);
-  background-color: var(--text-accent);
-  box-shadow: var(--shadow-glow-accent);
-  flex-shrink: 0;
+  border-color: var(--accent-solar);
+  color: var(--text-pure);
+  transform: translateY(-1px);
 }
 
 /* --------------------------------------------------------------------------
-   5. Специальный Landscape / Short Viewport Layout (Высота <= 520px)
-   -------------------------------------------------------------------------- */
-@media (max-height: 520px) {
-  .workshop-modal-wrap:not(.minimized) {
-    padding-block: 0.4rem;
-    padding-inline: 0.6rem;
-  }
-
-  .workshop-card {
-    padding-inline: 0.95rem;
-    padding-block: 0.45rem;
-    max-block-size: calc(100svh - 0.6rem);
-    max-block-size: calc(100dvh - 0.6rem);
-    border-radius: var(--radius-md);
-  }
-
-  .card-top-row {
-    margin-block-end: 0.2rem;
-  }
-
-  .modal-title {
-    font-size: 1.12rem;
-    margin-block-end: 0.1rem;
-  }
-
-  .modal-subtitle {
-    font-size: 0.68rem;
-    margin-block-end: 0.3rem;
-  }
-
-  .modal-desc {
-    margin-block-end: 0.35rem;
-  }
-
-  .desc-lead {
-    font-size: 0.74rem;
-    line-height: 1.35;
-    margin-block-end: 0.25rem;
-  }
-
-  .desc-block-title {
-    font-size: 0.7rem;
-    margin-block-end: 0.2rem;
-  }
-
-  .desc-list {
-    margin-block: 0 0.25rem;
-  }
-
-  .desc-list li {
-    font-size: 0.7rem;
-    line-height: 1.3;
-    margin-block-end: 0.12rem;
-  }
-
-  .desc-footer-note {
-    font-size: 0.68rem;
-    line-height: 1.3;
-  }
-
-  .modal-stack {
-    gap: 0.22rem;
-    margin-block-end: 0.35rem;
-  }
-
-  .stack-pill {
-    font-size: 0.64rem;
-    padding-inline: 0.4rem;
-    padding-block: 0.15rem;
-  }
-
-  .modal-footer {
-    padding-block-start: 0.35rem;
-  }
-
-  .btn-contact,
-  .btn-minimize-bottom {
-    min-block-size: 34px;
-    padding-inline: 0.65rem;
-    padding-block: 0.25rem;
-    font-size: 0.68rem;
-  }
-}
-
-/* Двухколоночный landscape-режим для смартфонов при повороте экрана */
-@media (max-height: 480px) and (min-width: 620px) {
-  .workshop-card {
-    inline-size: min(720px, calc(100vw - 1.5rem));
-    display: grid !important;
-    grid-template-columns: 1.15fr 0.85fr;
-    column-gap: 1.1rem;
-    align-items: start;
-  }
-
-  .card-top-row {
-    grid-column: 1 / -1;
-    margin-block-end: 0.15rem;
-  }
-
-  .modal-title,
-  .modal-subtitle {
-    grid-column: 1;
-  }
-
-  .modal-desc {
-    grid-column: 1;
-    margin-block-end: 0;
-  }
-
-  .modal-stack {
-    grid-column: 2;
-    margin-block-end: 0.45rem;
-  }
-
-  .modal-footer {
-    grid-column: 2;
-    padding-block-start: 0.45rem;
-  }
-
-  .workshop-modal-wrap.minimized {
-    inset-block-end: max(clamp(0.6rem, 2svh, 1rem), env(safe-area-inset-bottom, 0px));
-    inset-inline-end: max(clamp(0.75rem, 2vw, 1.5rem), env(safe-area-inset-right, 0px));
-  }
-}
-
-/* --------------------------------------------------------------------------
-   6. Доступность: Focus-Visible
+   5. Доступность (A11y Focus)
    -------------------------------------------------------------------------- */
 :focus:not(:focus-visible) {
   outline: none;
@@ -611,86 +468,263 @@
 .btn-contact:focus-visible,
 .btn-close-icon:focus-visible,
 .btn-minimize-bottom:focus-visible,
-.btn-restore:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: var(--focus-offset);
+.btn-restore:focus-visible,
+.privacy-link:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
 }
 
 /* --------------------------------------------------------------------------
-   7. Системные режимы доступности (A11y Shields)
+   6. Мобильная адаптация
    -------------------------------------------------------------------------- */
-@media (prefers-reduced-transparency: reduce) {
-  .workshop-card,
-  .btn-restore,
-  .badge,
-  .hint {
-    background-color: var(--surface-solid-fallback) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+@media (max-width: 480px) {
+  .modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
   }
-}
+  
+  .modal-contacts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    inline-size: 100%;
+  }
 
-@media (forced-colors: active) {
-  .workshop-card,
-  .btn-contact,
-  .badge,
-  .hint,
-  .stack-pill,
-  .btn-close-icon,
   .btn-minimize-bottom,
-  .btn-restore {
-    forced-color-adjust: auto;
-    border: 1px solid ButtonBorder !important;
-    outline: none;
-  }
-
-  .btn-contact:focus-visible,
-  .btn-close-icon:focus-visible,
-  .btn-minimize-bottom:focus-visible,
-  .btn-restore:focus-visible {
-    outline: 2px solid Highlight !important;
-    outline-offset: 3px;
-  }
-
-  .badge-dot,
-  .badge-amber-dot {
-    background-color: Highlight !important;
-    box-shadow: none !important;
+  .privacy-link {
+    text-align: center;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+@media (max-height: 520px) {
+  .workshop-card {
+    padding: 0.8rem 1rem;
+    max-block-size: calc(100svh - 0.5rem);
   }
-
-  .btn-restore:hover {
-    transform: none !important;
+  .modal-stack {
+    margin-block-end: 0.5rem;
   }
 }
 
+/* --------------------------------------------------------------------------
+   7. Диалоговое окно предупреждения о переходе (Interstitial Redirect Modal)
+   -------------------------------------------------------------------------- */
+.redirect-modal-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  background: rgba(2, 3, 7, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-.privacy-link {
-  font-size: clamp(0.65rem, 0.62rem + 0.15vw, 0.72rem);
+.redirect-modal-wrap.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.redirect-card {
+  inline-size: min(440px, 100%);
+  background-color: var(--surface-chassis);
+  border: 1px solid var(--border-chassis);
+  border-radius: var(--radius-card);
+  padding: clamp(1.2rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow-chassis);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  user-select: text;
+  transform: scale(0.96);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.redirect-modal-wrap.active .redirect-card {
+  transform: scale(1);
+}
+
+.redirect-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-end: 0.85rem;
+}
+
+.redirect-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-solar);
+  background: var(--surface-subtle);
+  border: 1px solid rgba(226, 195, 102, 0.22);
+  padding: 0.22rem 0.5rem;
+  border-radius: var(--radius-xs);
+}
+
+.redirect-title {
+  font-family: var(--font-ui);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text-pure);
+  margin-block-end: 0.45rem;
+}
+
+.redirect-desc {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-block-end: 1rem;
+}
+
+/* Контейнер целевой ссылки: вид инженерного терминала */
+.redirect-url-box {
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-xs);
+  padding: 0.65rem 0.8rem;
+  margin-block-end: 1.25rem;
+}
+
+.url-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
   color: var(--text-muted);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--border-subtle);
-  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-block-end: 0.25rem;
 }
 
-.privacy-link:hover {
-  color: var(--text-primary);
-  text-decoration-color: var(--text-accent);
+.url-value {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-solar);
+  word-break: break-all;
+  user-select: all;
 }
 
-.privacy-link:focus-visible {
-  outline: 2px solid var(--focus-ring);
+.redirect-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.btn-redirect-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 36px;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+  padding-inline: 0.95rem;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: all var(--duration-interactive) ease;
+}
+
+.btn-redirect-cancel:hover {
+  background-color: var(--surface-subtle);
+  border-color: var(--border-chassis);
+  color: var(--text-pure);
+}
+
+.btn-redirect-confirm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 36px;
+  cursor: pointer;
+  background-color: var(--accent-solar);
+  border: 1px solid var(--accent-solar);
+  color: #0b0d13;
+  padding-inline: 1.15rem;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: all var(--duration-interactive) var(--ease-out-expo);
+}
+
+.btn-redirect-confirm:hover {
+  background-color: var(--accent-solar-hover);
+  border-color: var(--accent-solar-hover);
+  transform: translateY(-1px);
+}
+
+.btn-redirect-confirm:focus-visible,
+.btn-redirect-cancel:focus-visible {
+  outline: 2px solid var(--border-focus);
   outline-offset: 2px;
-  border-radius: 2px;
+}
+
+/* Интерактивная плашка контакта с возможностью копирования */
+.redirect-url-box {
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-xs);
+  padding: 0.75rem 0.85rem;
+  margin-block-end: 1.25rem;
+  cursor: pointer;
+  transition: all var(--duration-interactive) ease;
+}
+
+.redirect-url-box:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-chassis);
+}
+
+.url-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-end: 0.3rem;
+  gap: 0.5rem;
+}
+
+.url-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.url-hint {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.url-hint.copied {
+  color: #4ade80; /* Мягкий зеленый статус успешного копирования */
+  font-weight: 500;
+}
+
+.url-value {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--accent-solar);
+  word-break: break-all;
+  user-select: all;
 }

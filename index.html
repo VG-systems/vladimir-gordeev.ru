@@ -2,24 +2,22 @@
 <html lang="ru" prefix="og: https://ogp.me/ns#">
 <head>
   <meta charset="UTF-8">
-  <!-- Доступный viewport: разрешен пользовательский зум для людей со слабым зрением -->
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   
-  <!-- Favicons & Mobile Icons -->
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/assets/favicons/favicon.svg" type="image/svg+xml">
-  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicons/favicon-48x48.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicons/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
-  <link rel="manifest" href="/assets/favicons/site.webmanifest">
-  <meta name="theme-color" content="#090B10">  
-  
   <title>Владимир Гордеев // Web, IoT, ПЛК & Python разработка на заказ</title>
-  <meta name="description" content="Инженерная мастерская Владимира Гордеева. Разработка веб-сервисов, IoT-устройств (ESP32/Arduino), программирование промышленных ПЛК, прикладной Python и ПО на заказ.">
-  <meta name="author" content="Владимир Гордеев">
+
+  <!-- Безопасность и политики -->
+  <!-- 1. CSP: защита от инъекций, запрет плагинов и подмены base-uri -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://vladimir-gordeev.ru; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self';">
+  <!-- 2. Приватность: безопасная передача реферера по внешним ссылкам (Telegram, почта) -->
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <!-- 3. Поисковые роботы и канонический адрес -->
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://vladimir-gordeev.ru/">
+
+  <!-- Основное SEO -->
+  <meta name="description" content="Инженерная мастерская Владимира Гордеева. Разработка веб-сервисов, IoT-устройств (ESP32/Arduino), программирование промышленных ПЛК, прикладной Python и ПО на заказ.">
+  <meta name="author" content="Владимир Гордеев">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -35,7 +33,18 @@
   <meta name="twitter:description" content="Разработка программного обеспечения под ключ, автоматизация и embedded-решения.">
   <meta name="twitter:image" content="https://vladimir-gordeev.ru/preview.jpg">
 
-  <!-- Валидная микроразметка Schema.org: ProfilePage -> Person (без плейсхолдеров и устаревших типов) -->
+  <!-- Фавиконы, PWA и темы оформления -->
+  <meta name="theme-color" content="#090B10">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/favicons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicons/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicons/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/favicons/site.webmanifest">
+
+  <!-- Микроразметка Schema.org: ProfilePage -> Person -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -76,7 +85,23 @@
   }
   </script>
 
-  <!-- КРИТИЧЕСКИЙ CSS (Zero-CLS, Safe-Area Skeleton, без text-size-adjust: none) -->
+  <!-- Защита от кликджекинга для GitHub Pages (OWASP Frame-Busting) -->
+  <style id="antiClickjack">
+    body { display: none !important; }
+  </style>
+  <script>
+    if (self === top) {
+      var antiClickjack = document.getElementById('antiClickjack');
+      antiClickjack.parentNode.removeChild(antiClickjack);
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <noscript>
+    <style>body { display: block !important; }</style>
+  </noscript>
+
+  <!-- Критический CSS (Zero-CLS, Safe-Area Skeleton) -->
   <style>
     :where(*, *::before, *::after) {
       box-sizing: border-box;
@@ -116,7 +141,6 @@
       touch-action: none;
     }
 
-    /* HUD Оверлей с учетом Safe-Area */
     .hud {
       position: fixed;
       inset: 0;
@@ -154,14 +178,12 @@
       .hud-bottom { max-inline-size: 100%; }
     }
 
-    /* Каркас модального контейнера */
     .workshop-modal-wrap {
       position: fixed;
       z-index: 100;
       pointer-events: none;
     }
 
-    /* Развернутое состояние: центрирование с защитой от вырезов экрана */
     .workshop-modal-wrap:not(.minimized) {
       inset: 0;
       display: flex;
@@ -173,7 +195,6 @@
       padding-inline-end: max(clamp(0.5rem, 2vw, 1rem), env(safe-area-inset-right, 0px));
     }
 
-    /* Свернутое состояние: правый нижний угол над заголовком */
     .workshop-modal-wrap.minimized {
       inset: auto;
       inset-block-end: max(clamp(1rem, 2.5vw, 2rem), env(safe-area-inset-bottom, 0px));
@@ -193,7 +214,6 @@
       pointer-events: auto;
     }
 
-    /* Переключение состояний через display (Zero CLS) */
     .workshop-card { display: flex; }
     .workshop-modal-wrap.minimized .workshop-card { display: none !important; }
 
@@ -201,10 +221,10 @@
     .workshop-modal-wrap.minimized .btn-restore { display: inline-flex; }
   </style>
 
-  <!-- Единственное корректное подключение основного файла стилей -->
+  <!-- Основная таблица стилей -->
   <link rel="stylesheet" href="/assets/css/style.css">
 
-  <!-- Асинхронные неблокирующие модули WebGL (загружаются в фоне, выполняются по порядку) -->
+  <!-- Асинхронные модули WebGL (загружаются в фоне, выполняются по порядку) -->
   <script defer src="/assets/js/lib/three.min.js"></script>
   <script defer src="/assets/js/cosmos.js"></script>
   <script defer src="/assets/js/dust.js"></script>
@@ -215,6 +235,7 @@
   <script defer src="/assets/js/genesis.js"></script>
   <script defer src="/assets/js/main.js"></script>
 </head>
+
 <body class="modal-open">
   <canvas id="webgl"></canvas>
 
@@ -239,13 +260,13 @@
   <!-- Интерактивный компонент визитки -->
   <main class="workshop-modal-wrap" id="modalWrap">
     
-    <!-- Настоящий доступный элемент-кнопка для разворачивания (Hit target 44px+) -->
+    <!-- Кнопка восстановления: hit target 44px+, синхронизирована с состоянием диалога -->
     <button type="button" 
             class="btn-restore" 
             id="btnRestore" 
             aria-label="Развернуть визитную карточку инженера"
             aria-controls="modalCard"
-            aria-expanded="false">
+            aria-expanded="true">
       <span class="badge-amber-dot" aria-hidden="true"></span>
       <span>Развернуть</span>
     </button>
@@ -299,14 +320,14 @@
       </section>
 
       <footer class="modal-footer">
-		  <div class="modal-contacts">
-			<a href="https://t.me/LoftCreator" target="_blank" rel="noopener noreferrer" class="btn-contact">Telegram</a>
-			<a href="mailto:dev@vladimir-gordeev.ru" class="btn-contact">Email</a>
-		  </div>
-		  <!-- Ссылка для формального комплаенса 152-ФЗ -->
-		  <a href="/privacy.html" class="privacy-link">Политика конфиденциальности</a>
-		  <button type="button" class="btn-minimize-bottom" id="btnMinimizeBottom">Свернуть —</button>
-	 </footer>
+        <div class="modal-contacts">
+          <a href="https://t.me/LoftCreator" target="_blank" rel="noopener noreferrer" class="btn-contact">Telegram</a>
+          <a href="mailto:dev@vladimir-gordeev.ru" class="btn-contact">Email</a>
+        </div>
+        <!-- Ссылка для формального комплаенса 152-ФЗ -->
+        <a href="/privacy.html" class="privacy-link">Политика конфиденциальности</a>
+        <button type="button" class="btn-minimize-bottom" id="btnMinimizeBottom">Свернуть —</button>
+      </footer>
 
     </section>
   </main>
@@ -352,5 +373,98 @@
       });
     })();
   </script>
+  <!-- Диалоговое окно прямого контакта -->
+  <aside class="redirect-modal-wrap" id="redirectModalWrap" hidden aria-hidden="true">
+    <div class="redirect-card" 
+         role="dialog" 
+         aria-modal="true" 
+         aria-labelledby="redirectTitle" 
+         aria-describedby="redirectDesc">
+      
+      <div class="redirect-top-row">
+        <div class="redirect-tag">
+          <span class="badge-amber-dot" aria-hidden="true"></span>
+          <span id="redirectTagText">СВЯЗЬ</span>
+        </div>
+        <button type="button" 
+                class="btn-close-icon" 
+                id="btnRedirectClose" 
+                aria-label="Закрыть окно" 
+                title="Закрыть">✕</button>
+      </div>
+
+      <h3 class="redirect-title" id="redirectTitle">Связаться</h3>
+      
+      <p class="redirect-desc" id="redirectDesc">
+        Выберите удобный способ связи для обсуждения задачи.
+      </p>
+
+      <!-- Интерактивный блок адреса: кликабелен для копирования -->
+      <div class="redirect-url-box" title="Нажмите, чтобы скопировать">
+        <div class="url-header-row">
+          <span class="url-label" id="redirectUrlLabel">Контакт:</span>
+          <span class="url-hint" id="redirectCopyHint">кликните, чтобы скопировать</span>
+        </div>
+        <div class="url-value" id="redirectTargetUrl">—</div>
+      </div>
+
+      <footer class="redirect-footer">
+        <button type="button" class="btn-redirect-cancel" id="btnRedirectCancel">
+          Назад
+        </button>
+        <button type="button" class="btn-redirect-confirm" id="btnRedirectConfirm">
+          Открыть
+        </button>
+      </footer>
+    </div>
+  </aside>
+
+  <!-- Обновленный скрипт контроллера карточки (экспортирует window.workshopCard для interstitial.js) -->
+  <script>
+    (function() {
+      const wrap = document.getElementById('modalWrap');
+      const btnCloseTop = document.getElementById('btnCloseTop');
+      const btnMinimizeBottom = document.getElementById('btnMinimizeBottom');
+      const btnRestore = document.getElementById('btnRestore');
+
+      function minimizeCard() {
+        wrap.classList.add('minimized');
+        document.body.classList.remove('modal-open');
+        btnRestore.setAttribute('aria-expanded', 'false');
+      }
+
+      function expandCard() {
+        wrap.classList.remove('minimized');
+        document.body.classList.add('modal-open');
+        btnRestore.setAttribute('aria-expanded', 'true');
+        if (btnCloseTop) btnCloseTop.focus();
+      }
+
+      // Экспортируем методы для внешнего управления
+      window.workshopCard = {
+        minimize: minimizeCard,
+        expand: expandCard,
+        isMinimized: function() { return wrap.classList.contains('minimized'); }
+      };
+
+      if (btnCloseTop) btnCloseTop.addEventListener('click', minimizeCard);
+      if (btnMinimizeBottom) btnMinimizeBottom.addEventListener('click', minimizeCard);
+      if (btnRestore) btnRestore.addEventListener('click', expandCard);
+
+      window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !wrap.classList.contains('minimized') && !document.body.classList.contains('interstitial-open')) {
+          minimizeCard();
+        }
+      });
+
+      ['mousedown', 'mousemove', 'mouseup', 'touchstart', 'touchmove', 'touchend', 'wheel', 'pointerdown'].forEach(function(evt) {
+        wrap.addEventListener(evt, function(e) { e.stopPropagation(); });
+      });
+    })();
+  </script>
+
+  <!-- Подключаем модуль окна подтверждения перехода -->
+  <script defer src="/assets/js/interstitial.js"></script>
+</body>
 </body>
 </html>
