@@ -1,9 +1,3 @@
-User-agent: Yandex
-Allow: /
-Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content /
-Clean-param: yclid&gclid&fbclid /
-Sitemap: https://vladimir-gordeev.ru/sitemap.xml
-
 User-agent: *
 Allow: /
 Sitemap: https://vladimir-gordeev.ru/sitemap.xml
