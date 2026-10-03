@@ -221,7 +221,8 @@
     .workshop-modal-wrap.minimized .btn-restore { display: inline-flex; }
   </style>
 
-  <!-- Основная таблица стилей -->
+  <!-- Устранение блокировки рендеринга CSS -->
+  <link rel="preload" href="/assets/css/style.css" as="style">
   <link rel="stylesheet" href="/assets/css/style.css">
 
   <!-- Асинхронные модули WebGL (загружаются в фоне, выполняются по порядку) -->
@@ -332,47 +333,6 @@
     </section>
   </main>
 
-  <!-- Скрипт доступности диалога (Работает автономно и мгновенно, без ожидания Three.js) -->
-  <script>
-    (function() {
-      const wrap = document.getElementById('modalWrap');
-      const btnCloseTop = document.getElementById('btnCloseTop');
-      const btnMinimizeBottom = document.getElementById('btnMinimizeBottom');
-      const btnRestore = document.getElementById('btnRestore');
-
-      function minimizeCard() {
-        wrap.classList.add('minimized');
-        document.body.classList.remove('modal-open');
-        btnRestore.setAttribute('aria-expanded', 'false');
-        btnRestore.focus();
-      }
-
-      function expandCard() {
-        wrap.classList.remove('minimized');
-        document.body.classList.add('modal-open');
-        btnRestore.setAttribute('aria-expanded', 'true');
-        btnCloseTop.focus();
-      }
-
-      if (btnCloseTop) btnCloseTop.addEventListener('click', minimizeCard);
-      if (btnMinimizeBottom) btnMinimizeBottom.addEventListener('click', minimizeCard);
-      if (btnRestore) btnRestore.addEventListener('click', expandCard);
-
-      // Закрытие по клавише Escape
-      window.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !wrap.classList.contains('minimized')) {
-          minimizeCard();
-        }
-      });
-
-      // Изоляция взаимодействия с модалкой от камеры WebGL
-      ['mousedown', 'mousemove', 'mouseup', 'touchstart', 'touchmove', 'touchend', 'wheel', 'pointerdown'].forEach(function(evt) {
-        wrap.addEventListener(evt, function(e) {
-          e.stopPropagation();
-        });
-      });
-    })();
-  </script>
   <!-- Диалоговое окно прямого контакта -->
   <aside class="redirect-modal-wrap" id="redirectModalWrap" hidden aria-hidden="true">
     <div class="redirect-card" 
@@ -419,7 +379,7 @@
     </div>
   </aside>
 
-  <!-- Обновленный скрипт контроллера карточки (экспортирует window.workshopCard для interstitial.js) -->
+  <!-- Контроллер карточки и доступности (экспортирует window.workshopCard для interstitial.js) -->
   <script>
     (function() {
       const wrap = document.getElementById('modalWrap');
@@ -431,6 +391,7 @@
         wrap.classList.add('minimized');
         document.body.classList.remove('modal-open');
         btnRestore.setAttribute('aria-expanded', 'false');
+        btnRestore.focus();
       }
 
       function expandCard() {
@@ -465,6 +426,5 @@
 
   <!-- Подключаем модуль окна подтверждения перехода -->
   <script defer src="/assets/js/interstitial.js"></script>
-</body>
 </body>
 </html>

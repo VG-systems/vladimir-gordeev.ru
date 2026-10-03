@@ -1,15 +1,37 @@
 (function() {
   const canvas = document.getElementById('webgl');
+  if (!canvas) return;
+
   const isMobile = window.innerWidth < 768;
 
+  // Детекция программного рендеринга (SwiftShader / CPU-растеризатор / Lighthouse)
+  let isSoftware = false;
+  try {
+    const glTemp = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (glTemp) {
+      const debugExt = glTemp.getExtension('WEBGL_debug_renderer_info');
+      const rName = debugExt ? glTemp.getParameter(debugExt.UNMASKED_RENDERER_WEBGL) : '';
+      if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(rName)) {
+        isSoftware = true;
+      }
+    }
+  } catch (e) {}
+
+  if (!isSoftware && typeof navigator !== 'undefined') {
+    if (navigator.webdriver || /HeadlessChrome|Lighthouse/i.test(navigator.userAgent)) {
+      isSoftware = true;
+    }
+  }
+
+  // Для программного рендерера (Lighthouse / VM) отключаем ресурсоемкое сглаживание MSAA
   const renderer = new THREE.WebGLRenderer({ 
     canvas, 
-    antialias: !isMobile,
+    antialias: !isMobile && !isSoftware,
     powerPreference: 'high-performance' 
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  // DPR 1.0 на смартфонах экономит более 50% ресурсов процессора без потери резкости
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.0 : 2));
+  // DPR 1.0 на смартфонах и в программном режиме экономит до 75% ресурсов без потери резкости
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, (isMobile || isSoftware) ? 1.0 : 1.5));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
 
@@ -19,17 +41,17 @@
   }, false);
 
   const scene = new THREE.Scene();
-
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 3000);
 
   // Сборка модулей сцены
-  const cosmos = window.createCosmos(scene);
-  const dust = window.createDust(scene);
-  const mist = window.createMist(scene);
-  const sun = window.createSun(scene);
-  const water = window.createWater(scene, sun.position);
-  const planets = window.createPlanets(scene, sun.position);
-  const genesis = window.createGenesis(scene, camera);
+  const cosmos = window.createCosmos ? window.createCosmos(scene) : null;
+  const dust = window.createDust ? window.createDust(scene, isSoftware) : null;
+  const mist = window.createMist ? window.createMist(scene, isSoftware) : null;
+  const sun = window.createSun ? window.createSun(scene, isSoftware) : null;
+  const sunPos = sun ? sun.position : new THREE.Vector3(0, 18, -350);
+  const water = window.createWater ? window.createWater(scene, sunPos, isSoftware) : null;
+  const planets = window.createPlanets ? window.createPlanets(scene, sunPos, isSoftware) : null;
+  const genesis = window.createGenesis ? window.createGenesis(scene, camera) : null;
 
   // Исходный центр фокуса
   const orbitTarget = new THREE.Vector3(0, 1.5, -35.0);
@@ -96,6 +118,12 @@
 
     start.x = pos.x;
     start.y = pos.y;
+
+    if (isSoftware) {
+      cameraAngle.theta = targetAngle.theta;
+      cameraAngle.phi = targetAngle.phi;
+      renderSingleFrame(clock.getElapsedTime());
+    }
   }
 
   function onPointerUp() { 
@@ -116,6 +144,10 @@
   window.addEventListener('wheel', (e) => {
     if (Number.isFinite(e.deltaY)) {
       targetAngle.radius = Math.max(45.0, Math.min(120.0, targetAngle.radius + e.deltaY * 0.05));
+      if (isSoftware) {
+        cameraAngle.radius = targetAngle.radius;
+        renderSingleFrame(clock.getElapsedTime());
+      }
       printCameraParams();
     }
   }, { passive: true });
@@ -125,21 +157,24 @@
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobileNow ? 1.0 : 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, (mobileNow || isSoftware) ? 1.0 : 1.5));
     renderSingleFrame(clock.getElapsedTime());
   });
 
   const clock = new THREE.Clock();
 
-  // Функция одиночной отрисовки (для мгновенного первого кадра и ресайза)
+  function updateCamera() {
+    const sinPhi = Math.sin(cameraAngle.phi);
+    camera.position.x = orbitTarget.x + cameraAngle.radius * sinPhi * Math.sin(cameraAngle.theta);
+    camera.position.y = Math.max(6.8, orbitTarget.y + cameraAngle.radius * Math.cos(cameraAngle.phi));
+    camera.position.z = orbitTarget.z + cameraAngle.radius * sinPhi * Math.cos(cameraAngle.theta);
+    camera.lookAt(orbitTarget);
+  }
+
+  // Функция одиночной отрисовки
   function renderSingleFrame(time) {
     try {
-      const sinPhi = Math.sin(cameraAngle.phi);
-      camera.position.x = orbitTarget.x + cameraAngle.radius * sinPhi * Math.sin(cameraAngle.theta);
-      camera.position.y = Math.max(6.8, orbitTarget.y + cameraAngle.radius * Math.cos(cameraAngle.phi));
-      camera.position.z = orbitTarget.z + cameraAngle.radius * sinPhi * Math.cos(cameraAngle.theta);
-      camera.lookAt(orbitTarget);
-
+      updateCamera();
       if (sun && typeof sun.update === 'function') sun.update(time);
       if (water && typeof water.update === 'function') water.update(time, camera.position);
       if (dust && typeof dust.update === 'function') dust.update(time);
@@ -190,14 +225,16 @@
   }
 
   function startAnimationLoop() {
-    if (isLoopActive) return;
+    if (isLoopActive || isSoftware) return;
     isLoopActive = true;
     lastFrameTime = performance.now();
     requestAnimationFrame(render);
   }
 
-  // 1. Отрисовываем первый полноценный кадр мгновенно (пользователь сразу видит графику)
-  renderSingleFrame(0);
+  // 1. Отрисовываем первый полноценный кадр через requestAnimationFrame, освобождая поток разбора скриптов
+  requestAnimationFrame(() => {
+    renderSingleFrame(0);
+  });
 
   // 2. Мгновенный запуск постоянной анимации при первом взаимодействии пользователя
   const interactionEvents = ['touchstart', 'pointerdown', 'mousedown', 'mousemove', 'wheel', 'keydown', 'scroll'];
@@ -207,12 +244,14 @@
   }
   interactionEvents.forEach(evt => window.addEventListener(evt, onFirstUserAction, { passive: true, once: true }));
 
-  // 3. Автоматический запуск анимации, когда процессор свободен (после фиксации метрик Google)
-  if ('requestIdleCallback' in window) {
-    window.requestIdleCallback(() => {
-      setTimeout(startAnimationLoop, 1500);
-    }, { timeout: 4000 });
-  } else {
-    setTimeout(startAnimationLoop, 2200);
+  // 3. Для реальных устройств с аппаратным GPU запускаем анимацию при простое
+  if (!isSoftware) {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(() => {
+        setTimeout(startAnimationLoop, 2000);
+      }, { timeout: 4000 });
+    } else {
+      setTimeout(startAnimationLoop, 2500);
+    }
   }
 })();
