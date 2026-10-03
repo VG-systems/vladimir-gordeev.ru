@@ -1,8 +1,15 @@
 (function() {
   const canvas = document.getElementById('webgl');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  const isMobile = window.innerWidth < 768;
+
+  const renderer = new THREE.WebGLRenderer({ 
+    canvas, 
+    antialias: !isMobile, // На мобильных отключаем тяжелый MSAA (на экранах 400+ PPI он не нужен)
+    powerPreference: 'high-performance' 
+  });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // На смартфонах лимит DPR 1.5 экономит до 44% пиксельного шейдинга без потери четкости
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
 
@@ -24,10 +31,10 @@
   const planets = window.createPlanets(scene, sun.position);
   const genesis = window.createGenesis(scene, camera);
 
-  // Исходный центр фокуса (панорама горизонта на воде)
+  // Исходный центр фокуса
   const orbitTarget = new THREE.Vector3(0, 1.5, -35.0);
 
-  // Текущий ракурс сцены (зафиксирован по вашим параметрам)
+  // Текущий ракурс сцены
   let isDown = false;
   let start = { x: 0, y: 0 };
   let cameraAngle = { theta: 0.135, phi: 1.175, radius: 82.0 };
@@ -42,12 +49,10 @@
     return codeSnippet;
   }
 
-  // Доступ через глобальную консоль: window.getCamera()
   window.getCamera = function() {
     return printCameraParams();
   };
 
-  // Копирование в буфер по нажатию клавиши "C" (русской "С" или латинской "C")
   window.addEventListener('keydown', (e) => {
     if (e.key === 'c' || e.key === 'C' || e.key === 'с' || e.key === 'С') {
       const text = printCameraParams();
@@ -116,16 +121,32 @@
   }, { passive: true });
 
   window.addEventListener('resize', () => {
+    const mobileNow = window.innerWidth < 768;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobileNow ? 1.5 : 2));
   });
 
   const clock = new THREE.Clock();
 
-  function render() {
+  // ===================================================================
+  // ОПТИМИЗИРОВАННЫЙ ЦИКЛ РЕНДЕРА (ТРОТТЛИНГ ДЛЯ МОБИЛЬНЫХ И ФОНА)
+  // ===================================================================
+  const targetFPS = isMobile ? 35 : 60;
+  const frameInterval = 1000 / targetFPS;
+  let lastFrameTime = performance.now();
+
+  function render(now) {
     requestAnimationFrame(render);
+
+    // 1. Не тратить процессор, если вкладка в фоне
+    if (document.hidden) return;
+
+    // 2. Троттлинг FPS для слабых процессоров
+    const delta = now - lastFrameTime;
+    if (delta < frameInterval) return;
+    lastFrameTime = now - (delta % frameInterval);
 
     try {
       const dt = Math.min(clock.getDelta(), 0.1);
@@ -164,5 +185,6 @@
     }
   }
 
-  render();
+  // Мягкий запуск после освобождения основного потока
+  requestAnimationFrame(render);
 })();

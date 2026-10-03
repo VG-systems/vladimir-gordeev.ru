@@ -171,7 +171,10 @@ window.createWater = function(scene, sunPosition) {
     }
   `;
 
-  const segments = (typeof window !== 'undefined' && window.innerWidth < 768) ? 130 : 260;
+  // Оптимизированная сетка: 50 сегментов на смартфонах устраняют CPU-узкое место,
+  // при этом на маленьком экране качество неотличимо благодаря карте нормалей
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const segments = isMobile ? 50 : 260;
   const oceanGeo = new THREE.PlaneGeometry(550, 550, segments, segments);
   oceanGeo.rotateX(-Math.PI / 2);
 

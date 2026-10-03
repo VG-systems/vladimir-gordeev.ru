@@ -1,12 +1,14 @@
 window.createDust = function(scene) {
-  const dustCount = 2000;
+  // Адаптивное число частиц: 700 на смартфонах достаточно для плотного эффекта
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const dustCount = isMobile ? 700 : 2000;
   const dustGeo = new THREE.BufferGeometry();
   const dustPos = new Float32Array(dustCount * 3);
   const dustSeed = new Float32Array(dustCount);
 
   for (let i = 0; i < dustCount; i++) {
     dustPos[i * 3 + 0] = (Math.random() - 0.5) * 260;
-    dustPos[i * 3 + 1] = Math.random() * 22; // летают невысоко над гребнями
+    dustPos[i * 3 + 1] = Math.random() * 22;
     dustPos[i * 3 + 2] = (Math.random() - 0.5) * 260;
     dustSeed[i] = Math.random() * 6.28;
   }
@@ -29,7 +31,6 @@ window.createDust = function(scene) {
         p.x += sin(uTime * 0.7 + aSeed) * 1.2;
 
         vec4 mvPos = modelViewMatrix * vec4(p, 1.0);
-        // Жесткий лимит размера: не больше 4-5px на экране
         gl_PointSize = clamp(6.0 * (90.0 / -mvPos.z), 1.5, 5.0);
         gl_Position = projectionMatrix * mvPos;
 
