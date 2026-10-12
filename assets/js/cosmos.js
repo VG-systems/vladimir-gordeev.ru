@@ -1119,8 +1119,8 @@ window.createCosmos = function createCosmos(scene) {
 
     return 0;
   });
-
-  // ------------------------------------------------------------
+  
+// ------------------------------------------------------------
   // 8. ИНТЕРАКТИВНОЕ НАВЕДЕНИЕ: ПРИЦЕЛ И АСТРОФИЗИЧЕСКИЙ HUD
   // ------------------------------------------------------------
   const styleEl = document.createElement('style');
@@ -1546,8 +1546,39 @@ window.createCosmos = function createCosmos(scene) {
     hideHoverHUD();
   }
 
+  // Проверка: находится ли курсор над модальными окнами, карточками или диалогами
+  function isPointerOverModal(event) {
+    let target = event && event.target;
+
+    if (!target || target === window || target === document || target === document.documentElement) {
+      if (
+        typeof document.elementFromPoint === 'function' &&
+        event &&
+        Number.isFinite(event.clientX) &&
+        Number.isFinite(event.clientY)
+      ) {
+        target = document.elementFromPoint(event.clientX, event.clientY);
+      }
+    }
+
+    if (!target || typeof target.closest !== 'function') return false;
+
+    return Boolean(
+      target.closest(
+        '.workshop-card, .redirect-modal-wrap, .redirect-card, [role="dialog"], .btn-restore, .star-hud-card'
+      )
+    );
+  }
+
   function onPointerMove(event) {
     if (disposed || isPointerDown) return;
+
+    // При наведении на модалку отключаем распознавание и прячем прицел
+    if (isPointerOverModal(event)) {
+      pointerInside = false;
+      hideHoverHUD();
+      return;
+    }
 
     const rect = getViewportRect();
 
@@ -1599,25 +1630,25 @@ window.createCosmos = function createCosmos(scene) {
   window.addEventListener(
     'pointerdown',
     onPointerDown,
-    { passive: true }
+    { capture: true, passive: true }
   );
 
   window.addEventListener(
     'pointerup',
     onPointerUp,
-    { passive: true }
+    { capture: true, passive: true }
   );
 
   window.addEventListener(
     'pointercancel',
     onPointerCancel,
-    { passive: true }
+    { capture: true, passive: true }
   );
 
   window.addEventListener(
     'pointermove',
     onPointerMove,
-    { passive: true }
+    { capture: true, passive: true }
   );
 
   // ------------------------------------------------------------
@@ -1709,10 +1740,10 @@ window.createCosmos = function createCosmos(scene) {
         catalogAbortController.abort();
       }
 
-      window.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointerup', onPointerUp);
-      window.removeEventListener('pointercancel', onPointerCancel);
-      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown, { capture: true });
+      window.removeEventListener('pointerup', onPointerUp, { capture: true });
+      window.removeEventListener('pointercancel', onPointerCancel, { capture: true });
+      window.removeEventListener('pointermove', onPointerMove, { capture: true });
 
       if (cosmosGroup.parent) {
         cosmosGroup.parent.remove(cosmosGroup);
@@ -1749,4 +1780,4 @@ window.createCosmos = function createCosmos(scene) {
   window.cosmos = cosmosAPI;
 
   return cosmosAPI;
-};
+};  
